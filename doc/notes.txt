@@ -1,0 +1,5 @@
+Read image meta data
+--------------------
+
+exif <imagefile.jpg>
+
