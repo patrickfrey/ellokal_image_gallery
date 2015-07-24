@@ -17,6 +17,9 @@ COPY ./entrypoint.sh /srv/entrypoint.sh
 
 # El Lokal database:
 # ------------------
+# VOLUME /var/log/ellokal
+RUN mkdir -p /var/log/ellokal
+RUN chown strus:strus /var/log/ellokal
 USER strus
 WORKDIR /home/strus
 COPY ./createDatabase.sql /home/strus/createDatabase.sql
