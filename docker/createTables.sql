@@ -55,7 +55,8 @@ CREATE TABLE ConcertPicture
 (
 	id		SERIAL	NOT NULL PRIMARY KEY,
 	concertId	INT REFERENCES Concert(id),
-	date		TIMESTAMP,
+	insertdate	TIMESTAMP,
+	eventdate	TIMESTAMP,
 	description_en	TEXT,
 	description_de	TEXT,
 	dim_X		INT,
