@@ -42,9 +42,10 @@ INPLIST="/var/log/ellokal/input_exif_$TIMSTMP.txt"
 LASTUPD="/srv/ellokal/.lastUpdate"
 
 if [ -f "$LASTUPD" ]; then
-	FINDOPT="-cnewer $LASTUPD"
+	find /srv/ellokal/[0-9]* -name "*.jpg" -cnewer $LASTUPD > $INPLIST
+else
+	find /srv/ellokal/[0-9]* -name "*.jpg" > $INPLIST
 fi
-find /srv/ellokal/[0-9]* -name "*.jpg" $FINDOPT > $INPLIST
 while read filename <&3; do
 	processImage "$filename" | psql --log-file="$LOGFILE" -U strus -d ellokaldb -h localhost -f-
 done 3< $INPLIST
