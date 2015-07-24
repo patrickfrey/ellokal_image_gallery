@@ -55,9 +55,21 @@ CREATE TABLE ConcertPicture
 (
 	id		SERIAL	NOT NULL PRIMARY KEY,
 	concertId	INT REFERENCES Concert(id),
-	insertDate	TIMESTAMP NOT NULL,
+	date		TIMESTAMP,
 	description_en	TEXT,
 	description_de	TEXT,
+	dim_X		INT,
+	dim_Y		INT,
+	brennweite	TEXT,
+	blende		TEXT,
+	verschlusszeit	TEXT,
+	program		TEXT,
+	resolution_X	FLOAT4,
+	resolution_Y	FLOAT4,
+	width		INT,
+	length		INT,
+	meta		TEXT,
+	fotograph	TEXT,
 	thumbnail	TEXT,
 	filename	TEXT
 );
