@@ -1,0 +1,34 @@
+[Document]
+	doc = /list/item;
+
+[SearchIndex]
+	word_en = convdia(en):stem(en):lc  word  /list/item/title();
+	word_en = convdia(en):stem(en):lc  word  /list/item/meta();
+	word_en = convdia(en):stem(en):lc  word  /list/item/description_en();
+
+	word_de = convdia(de):stem(de):lc  word  /list/item/title();
+	word_de = convdia(de):stem(de):lc  word  /list/item/meta();
+	word_de = convdia(de):stem(de):lc  word  /list/item/description_de();
+
+[ForwardIndex]
+	orig = orig split /list/item/title();
+	orig = orig split /list/item/meta();
+	orig = orig split /list/item/description_en();
+	orig = orig split /list/item/description_de();
+
+[MetaData]
+	insertdate = date2int("d 1877-01-01", "%Y-%m-%d %H:%M:%s *") content /list/item/insertdate();
+	eventdate = date2int("d 1877-01-01", "%Y-%m-%d %H:%M:%s *") content /list/item/eventdate();
+	concertid = orig word /list/item/concertId();
+
+[Attribute]
+	docid = orig content /list/item/id();
+	title = orig content /list/item/title();
+	insertdate = orig content /list/item/insertdate();
+	eventdate = orig content /list/item/eventdate();
+	width = orig content /list/item/width();
+	length = orig content /list/item/length();
+	fotograph = orig content /list/item/fotograph();
+	thumbnail = orig content /list/item/thumbnail();
+	filename = orig content /list/item/filename();
+

@@ -1,0 +1,9 @@
+SELECT selfeat;
+
+EVAL 1 * bm25( k1=0.75, b=2.1, avgdoclen=10, .match=docfeat );
+
+SUMMARIZE title = attribute( name=title );
+SUMMARIZE docid = attribute( name=docid );
+SUMMARIZE eventdate = attribute( name=eventdate );
+SUMMARIZE filename = attribute( name=filename );
+

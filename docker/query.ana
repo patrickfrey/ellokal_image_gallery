@@ -1,0 +1,2 @@
+word_de = convdia(de):stem(de):lc word;
+word_en = convdia(en):stem(en):lc word;
