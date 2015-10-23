@@ -13,6 +13,7 @@
 <?php
 require "strus.php";
 
+$resultcols = ("id","concertId","focaldist","apperture","shutterspeed","insertdate","eventdate","program","resolution_X","resolution_Y","width","length","meta","fotographer","thumbnail","filename","summary","weight");
 function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 {
 	$rt = ();
@@ -20,7 +21,6 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 	$dbconn = pg_connect("host=localhost dbname=ellokal") or die('Could not connect: ' . pg_last_error());
 
 	// Performing SQL query
-	$qcols = ("id","concertId","focaldist","apperture","shutterspeed","insertdate","eventdate","program","resolution_X","resolution_Y","width","length","meta","fotographer","thumbnail","filename");
 	$query = 'SELECT id,concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename FROM ConcertPicture';
 	$whereclause = '';
 	if ($idlist)
@@ -48,12 +48,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 		if ($ridx > $lastRank) break;
 		if ($ridx >= $minRank)
 		{
-			$elem = {};
-			$colidx = 0;
-			foreach ($row as $col) {
-				$elem[ $qcols[ $colidx]] = $col;
-			}
-			$rt[] = $elem;
+			$rt[] = $row;
 		}
 		++$ridx;
 	}
@@ -105,17 +100,19 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 			$query->pushDuplicate();
 			$query->defineFeature( "docfeat");
 		}
-		$query->pushExpression( "within", count($terms), 100000);
+		$query->pushExpression( "contains", count($terms));
 		$query->defineFeature( "selfeat");
 	}
 	$query->setMaxNofRanks( $maxNofRanks);
 	$query->setMinRank( $minRank);
 	$results = $query->evaluate();
 	$idlist = ();
-	$contentlist = ();
+	$summarylist = ();
+	$weightlist = ();
 	foreach ($results as &$result)
 	{
 		$id = 0;
+		$summary = '';
 		foreach ($result->attributes as &$attrib)
 		{
 			if ($attrib->name == 'DOCID')
@@ -125,16 +122,18 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 			}
 			if ($attrib->name == 'CONTENT')
 			{
-				if ($content != '') $content .= " // ";
-				$content .= $attrib->value;
+				if ($summary != '') $summary .= " // ";
+				$summary .= $attrib->value;
 			}
 		}
-		$contentlist[ $id] = $content;
+		$summarylist[ $id] = $summary;
+		$weightlist[ $id] = $result->weight;
 	}
 	$dbres = evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks);
 	foreach ($dbres as &$result)
 	{
-		$result[ "summary"] = $contentlist[ intval( $dbres['id'])];
+		$result[] = $summarylist[ intval( $dbres['id'])];
+		$result[] = $weightlist[ intval( $dbres['id'])];
 	}
 	return $dbres;
 }
@@ -204,28 +203,11 @@ try {
 
 	foreach ($results as &$result)
 	{
-		$title = "";
-		$content = "";
-		foreach ($result->attributes as &$attrib)
-		{
-			if ($attrib->name == 'CONTENT')
-			{
-				if ($content != "") $content .= ' ... ';
-				$content .= $attrib->value;
-			}
-			if ($attrib->name == 'TITLE')
-			{
-				$title .= $attrib->value;
-			}
-		}
-		$link = strtr ($title, array (' ' => '_'));
 		echo '<div id="search_rank">';
-			echo '<div id="rank_docno">' . "$result->docno</div>";
-			echo '<div id="rank_weight">' . number_format( $result->weight, 4) . "</div>";
-			echo '<div id="rank_content">';
-				echo '<div id="rank_title">' . "<a href=\"http://en.wikipedia.org/wiki/$link\">$title</a></div>";
-				echo '<div id="rank_summary">' . "$content</div>";
-			echo '</div>';
+		foreach ($result as &$attr)
+		{
+			echo '<div id="rank_elem">' . "$attr</div>";
+		}
 		echo '</div>';
 	}
 	echo '</div>';
