@@ -24,7 +24,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 		throw new Exception( 'Could not connect to database: ' . pg_last_error());
 	}
 	// Performing SQL query
-	$dbquery = 'SELECT id,concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename FROM ConcertPicture';
+	$dbquery = 'SELECT id,concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,filename FROM ConcertPicture';
 	$whereclause = '';
 	if ($idlist)
 	{
