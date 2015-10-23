@@ -135,6 +135,8 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		}
 		$summarylist[ $id] = $summary;
 		$weightlist[ $id] = $result->weight;
+		echo "SUMMARIES: ";
+		var_dump( $summarylist);
 	}
 	$dbres = evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks);
 	$nofresults = count( $dbres);
