@@ -3,8 +3,8 @@
 getPictureXmlSelect() {
 	TIMSTMP="$1"
 
-	# echo "SELECT Concert.title,ConcertPicture.concertId,ConcertPicture.brennweite,ConcertPicture.blende,ConcertPicture.verschlusszeit,ConcertPicture.insertdate,ConcertPicture.eventdate,ConcertPicture.program,ConcertPicture.resolution_X,ConcertPicture.resolution_Y,ConcertPicture.width,ConcertPicture.length,ConcertPicture.meta,ConcertPicture.fotograph,ConcertPicture.thumbnail,ConcertPicture.filename FROM ConcertPicture INNER JOIN Concert ON Concert.id=ConcertPicture.concertId WHERE ConcertPicture.insertdate >= '$TIMSTMP';"
-	echo "SELECT xmlelement(name item, xmlforest(ConcertPicture.id AS \"id\",ConcertPicture.concertId AS \"concertid\", Concert.title AS \"title\", ConcertPicture.brennweite AS \"brennweite\", ConcertPicture.blende AS \"blende\", ConcertPicture.verschlusszeit AS \"verschlusszeit\", ConcertPicture.insertdate AS \"insertdate\", ConcertPicture.eventdate AS \"eventdate\", ConcertPicture.program AS \"program\", ConcertPicture.resolution_X AS \"resolution_X\", ConcertPicture.resolution_Y AS \"resolution_Y\", ConcertPicture.width AS \"width\", ConcertPicture.length AS \"length\", ConcertPicture.meta AS \"meta\", ConcertPicture.fotograph AS \"fotograph\", ConcertPicture.thumbnail AS \"thumbnail\", ConcertPicture.filename AS \"filename\")) FROM ConcertPicture INNER JOIN Concert ON Concert.id=ConcertPicture.concertId WHERE ConcertPicture.insertdate >= '$TIMSTMP';"
+	# echo "SELECT Concert.title,ConcertPicture.concertId,ConcertPicture.focaldist,ConcertPicture.aperture,ConcertPicture.shutterspeed,ConcertPicture.insertdate,ConcertPicture.eventdate,ConcertPicture.program,ConcertPicture.resolution_X,ConcertPicture.resolution_Y,ConcertPicture.width,ConcertPicture.length,ConcertPicture.meta,ConcertPicture.fotograph,ConcertPicture.thumbnail,ConcertPicture.filename FROM ConcertPicture INNER JOIN Concert ON Concert.id=ConcertPicture.concertId WHERE ConcertPicture.insertdate >= '$TIMSTMP';"
+	echo "SELECT xmlelement(name item, xmlforest(ConcertPicture.id AS \"id\",ConcertPicture.concertId AS \"concertid\", Concert.title AS \"title\", ConcertPicture.focaldist AS \"focaldist\", ConcertPicture.apperture AS \"apperture\", ConcertPicture.shutterspeed AS \"shutterspeed\", ConcertPicture.insertdate AS \"insertdate\", ConcertPicture.eventdate AS \"eventdate\", ConcertPicture.program AS \"program\", ConcertPicture.resolution_X AS \"resolution_X\", ConcertPicture.resolution_Y AS \"resolution_Y\", ConcertPicture.width AS \"width\", ConcertPicture.length AS \"length\", ConcertPicture.meta AS \"meta\", ConcertPicture.fotograph AS \"fotograph\", ConcertPicture.thumbnail AS \"thumbnail\", ConcertPicture.filename AS \"filename\")) FROM ConcertPicture INNER JOIN Concert ON Concert.id=ConcertPicture.concertId WHERE ConcertPicture.insertdate >= '$TIMSTMP';"
 }
 
 getPictureXml() {
@@ -25,6 +25,7 @@ INPFILE="/var/log/ellokal/indert_picture_$FSTMP.xml"
 CONFIGDIR=./config
 
 getPictureXml $TIMSTMP > $INPFILE
+strusDestroy -S $CONFIGDIR/storage.conf
 strusCreate -S $CONFIGDIR/storage.conf
 strusInsert -S $CONFIGDIR/storage.conf -L "$LOGFILE" -c 20000 $CONFIGDIR/pictures.ana $INPFILE
 
