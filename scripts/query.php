@@ -14,6 +14,7 @@
 require "strus.php";
 
 $resultcols = ["id","concertId","focaldist","apperture","shutterspeed","insertdate","eventdate","program","resolution_X","resolution_Y","width","length","meta","fotographer","thumbnail","filename","summary","weight"];
+$textcols = ["ID","Konzert","Brennweite","Blende","Verschlusszeit","Einfügedatum","EventDatum","Program","Auflösung X","Auflösung Y","Breite","Länge","Meta Daten","Fotograf","Bild","Datei","Treffer","Gewichtung"];
 function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 {
 	$rt = [];
@@ -229,14 +230,16 @@ try {
 		echo '<img alt="Thumbnail" src="data:image/png;base64,' . $result[14] . '" />';
 		echo '</div>';
 
+		echo '<div id="rank_elem" weight=$weight><br/>';
 		foreach ($result as $colidx => $col)
 		{
 			if ($colidx != 14)
 			{
 				// not a thumbnail
-				echo '<div id="rank_elem" weight=$weight>' . $resultcols[$colidx] . " =  $col</div>";
+				echo $textcols[$colidx] . ": $col";
 			}
 		}
+		echo '</div>';
 		echo '</div>';
 	}
 	echo '</div>';
