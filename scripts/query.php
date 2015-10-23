@@ -143,10 +143,13 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$results = [];
 	foreach ($dbres as &$dbrow)
 	{
-		$dbrow[] = $summarylist[ intval( $dbrow['id'])];
+		$accures = $dbrow;
+		$accures[] = $summarylist[ intval( $dbrow['id'])];
 		$weight = $weightlist[ intval( $dbrow['id'])];
-		$dbrow[] = $weight;
-		$results[ $weight] = $dbrow;
+		echo( "WEIGHT ");
+		var_dump( $weight);
+		$accures[] = $weight;
+		$results[ $weight] = $accures;
 	}
 	krsort( $results);
 	return $results;
