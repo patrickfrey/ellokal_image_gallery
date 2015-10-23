@@ -38,7 +38,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 	{
 		$query .= " WHERE " . $whereclause;
 	}
-	$result = pg_query( $query) or die('Query failed: ' . pg_last_error());
+	$result = pg_query( $query) or throw new Exception( 'Database error: ' . pg_last_error());
 
 	// Printing results in HTML
 	$lastRank = $minRank + $maxNofRanks -1;
@@ -91,6 +91,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 
 	$query = $queryeval->createQuery( $storage);
 	$terms = $analyzer->analyzePhrase( "text", $queryString);
+	var_dump( $terms);
 	if (count( $terms) > 0)
 	{
 		foreach ($terms as &$term)
@@ -108,6 +109,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$idlist = [];
 	$summarylist = [];
 	$weightlist = [];
+	var_dump( $result);
 	foreach ($results as &$result)
 	{
 		$id = 0;
@@ -177,7 +179,9 @@ try {
 		}
 		$queryString = $_GET['q'];
 	}
+	var_dump( $queryString);
 	$context = new StrusContext( "localhost:7181" );
+	var_dump( $context);
 	$schemeDatabase_checked = "";
 	$schemeStrus_checked = "";
 	if ($scheme == "db")
