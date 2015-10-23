@@ -196,11 +196,13 @@ try {
 	{
 		$results = evalDatabaseQuery( $context, [], $minRank, $nofRanks);
 		$schemeDatabase_checked = "checked";
+		var_dump( $results);
 	}
 	else
 	{
 		$results = evalStrusQuery( $context, $queryString, $minRank, $nofRanks);
 		$schemeStrus_checked = "checked";
+		var_dump( $results);
 	}
 	echo '<form name="search" class method="GET" action="query.php">';
 	echo "<input id=\"search_input\" class=\"textinput\" type=\"text\" maxlength=\"256\" size=\"32\" name=\"q\" tabindex=\"1\" value=\"$queryString\"/>";
