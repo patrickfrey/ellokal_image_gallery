@@ -60,21 +60,23 @@ h1 {
 	display: table-row;
 }
 
-#rank_elem {
+#rank_attr {
 	display: table-cell;
 	font-size:0.7em;
 	align: center;
-	width: 5%;
+	width: 30%;
 }
 
 #rank_summary {
+	display: table-cell;
 	color:#668888;
 	font-size:1.1em;
 	line-height:1.2em;
-	width: 80%;
+	width: 30%;
 }
 
 #rank_thumbnail {
+	display: table-cell;
 	width:100px;
 	height:100px;
 }

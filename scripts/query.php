@@ -146,7 +146,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$accures[] = $summarylist[ intval( $dbrow[0])];
 		$weight = $weightlist[ intval( $dbrow[0])];
 		$accures[] = $weight;
-		$results[ ($weight + 1) * $nofresults + $ridx] = $accures;
+		$results[ number_format ( $weight, 7) . ',' . $ridx] = $accures;
 		++$ridx;
 	}
 	krsort( $results);
@@ -230,7 +230,7 @@ try {
 		echo '<img alt="Thumbnail" src="data:image/png;base64,' . $result[14] . '" />';
 		echo '</div>';
 
-		echo '<div id="rank_elem" weight=' . $weight . '><p>';
+		echo '<div id="rank_attr"><p>';
 		foreach ($result as $colidx => $col)
 		{
 			if ($colidx != 14)
