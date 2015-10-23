@@ -43,6 +43,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 	}
 	var_dump( $dbquery);
 	$result = pg_query( $dbquery);
+	var_dump( $result);
 	if (!$result)
 	{
 		throw new Exception( 'Database error: ' . pg_last_error());
@@ -195,8 +196,6 @@ try {
 	$schemeDatabase_checked = "";
 	$schemeStrus_checked = "";
 	$results = [];
-	var_dump( $scheme);
-	var_dump( $queryString);
 	if ($scheme == "db")
 	{
 		$results = evalDatabaseQuery( $context, [], $minRank, $nofRanks);
