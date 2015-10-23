@@ -1,0 +1,30 @@
+[Feature selfeat :word_de]
+  within( howe, gelb | 100 )
+[Feature docfeat :word_de]
+  howe gelb
+.
+[Feature selfeat :word_de]
+  within( howe, gelb | 100 )
+[Feature docfeat :word_de]
+  gelb
+.
+[Feature selfeat :word_de]
+  within( howe, gelb | 100 )
+[Feature docfeat :word_de]
+  howe
+.
+[Feature selfeat :word_de]
+  within( howe, gelb | 100 )
+[Feature docfeat :word_de]
+  howe gelb
+.
+[Feature selfeat :word_de]
+  within( howe, gelb | 100 )
+[Feature docfeat :word_de]
+  howe gelb
+.
+[Feature selfeat :word_de]
+  within( howe, gelb | 100 )
+[Feature docfeat :word_de]
+  howe gelb
+.

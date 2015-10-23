@@ -12,7 +12,7 @@ thumbnail() {
 }
 
 processImage() {
-	FILENAME=`echo "$1" | sed 's@/srv/ellokal/@@'`
+	FILENAME=`echo "$1" | sed 's@/data/ellokal.project-strus.net/@@'`
 	THUMBNAIL=`thumbnail "$1"`
 	DIM_X=`imageTag "$1" "Pixel X Dimension"`
 	DIM_Y=`imageTag "$1" "Pixel Y Dimension"`
@@ -37,15 +37,16 @@ processImage() {
 	echo "INSERT INTO ConcertPicture (concertId,dim_X,dim_Y,brennweite,blende,verschlusszeit,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotograph,thumbnail,filename) SELECT id,'$DIM_X','$DIM_Y','$BRENNWEITE','$BLENDE','$EXPTIME','$TIMSTMP','$DATETIME','$PROGRAM','$RESOLUTION_X','$RESOLUTION_Y','$WIDTH','$LENGTH','$META','$FOTOGRAPH','$THUMBNAIL','$FILENAME' FROM Concert WHERE date='$CONCERTDATE' AND title='$CONCERTNAME';"
 }
 
+DATADIR=/data/ellokal.project-strus.net/
 TIMSTMP="`date +'%y%m%d'`_`date +'%H%M%S'`"
 LOGFILE="/var/log/ellokal/insert_exif_$TIMSTMP.log"
 INPLIST="/var/log/ellokal/input_exif_$TIMSTMP.txt"
-LASTUPD="/srv/ellokal/.lastUpdate"
+LASTUPD="$DATADIR/.lastUpdate"
 
 if [ -f "$LASTUPD" ]; then
-	find /srv/ellokal/[0-9]* -name "*.jpg" -cnewer $LASTUPD > $INPLIST
+	find $DATADIR/[0-9]* -name "*.jpg" -cnewer $LASTUPD > $INPLIST
 else
-	find /srv/ellokal/[0-9]* -name "*.jpg" > $INPLIST
+	find $DATADIR/[0-9]* -name "*.jpg" > $INPLIST
 fi
 while read filename <&3; do
 	processImage "$filename" | psql --log-file="$LOGFILE" -U strus -d ellokaldb -h localhost -f-
