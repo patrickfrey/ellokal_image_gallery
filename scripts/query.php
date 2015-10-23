@@ -18,7 +18,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 {
 	$rt = [];
 	// Connecting, selecting database
-	$dbconn = pg_connect("host=localhost dbname=ellokal");
+	$dbconn = pg_connect("host=localhost,dbname=ellokal,user=pfrey");
 	if (!$dbconn)
 	{
 		throw new Exception( 'Could not connect to database: ' . pg_last_error());
