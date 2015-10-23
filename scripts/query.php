@@ -145,7 +145,9 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$id = intval( $dbrow[0]);
 		$accures = $dbrow;
 		$accures[] = $summarylist[ $id];
-		var_dump( $accures);
+		echo "SUMMARY: ";
+		var_dump( $id);
+		var_dump( $summarylist[ $id]);
 		$weight = $weightlist[ $id];
 		$accures[] = $weight;
 		$results[ number_format ( $weight, 7) . ',' . $ridx] = $accures;
