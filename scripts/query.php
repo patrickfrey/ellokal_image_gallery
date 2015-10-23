@@ -24,7 +24,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 		throw new Exception( 'Could not connect to database: ' . pg_last_error());
 	}
 	// Performing SQL query
-	$dbquery = 'SELECT id,concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,filename FROM ConcertPicture';
+	$dbquery = 'SELECT id,concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename FROM ConcertPicture';
 	$whereclause = '';
 	if ($idlist)
 	{
@@ -51,7 +51,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 	// Printing results in HTML
 	$lastRank = $minRank + $maxNofRanks -1;
 	$ridx = 0;
-	while ($row = pg_fetch_array( $result, null, PGSQL_ASSOC))
+	while ($row = pg_fetch_array( $result, null, PGSQL_NUM))
 	{
 		var_dump( $row);
 		if ($ridx > $lastRank) break;
@@ -137,12 +137,15 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$weightlist[ $id] = $result->weight;
 	}
 	$dbres = evalDatabaseQuery( $context, $idlist, $idlist, $minRank, $maxNofRanks);
-	foreach ($dbres as &$result)
+	$results = [];
+	foreach ($dbres as &$dbrow)
 	{
-		$result[] = $summarylist[ intval( $dbres['id'])];
-		$result[] = $weightlist[ intval( $dbres['id'])];
+		$dbrow[] = $summarylist[ intval( $dbrow['id'])];
+		$weight = $weightlist[ intval( $dbrow['id'])];
+		$dbrow[] = $weight;
+		$results[ $weight] = $dbrow;
 	}
-	return $dbres;
+	return krsort( $results);
 }
 
 try {
