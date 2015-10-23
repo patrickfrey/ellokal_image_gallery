@@ -103,6 +103,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	{
 		foreach ($terms as &$term)
 		{
+			var_dump( $term);
 			$query->pushTerm( "word_de", $term->value);
 			$query->pushDuplicate();
 			$query->defineFeature( "docfeat");
