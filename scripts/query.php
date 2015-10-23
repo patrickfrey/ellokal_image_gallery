@@ -74,7 +74,6 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 
 	$analyzer->definePhraseType( "text", "stem", "word", 
 			["lc",
-			["dictmap", "irregular_verbs_en.txt"],
 			["stem", "en"],
 			["convdia", "en"],
 			"lc"]);
