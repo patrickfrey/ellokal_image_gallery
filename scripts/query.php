@@ -35,7 +35,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 			if ($idx++ > 0) $whereclause .= ',';
 			$whereclause .= "$id";
 		}
-		$whereclause .= "id IN (";
+		$whereclause .= ")";
 	}
 	if ($whereclause != '')
 	{
@@ -113,10 +113,6 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$idlist = [];
 	$summarylist = [];
 	$weightlist = [];
-	var_dump( "-------------------");
-	var_dump( $terms);
-	var_dump( $results);
-	var_dump( "-------------------");
 	foreach ($results as &$result)
 	{
 		$id = 0;
