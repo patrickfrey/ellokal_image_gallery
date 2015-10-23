@@ -77,7 +77,6 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$queryeval->addWeightingFunction( 1.0, "BM25", [
 				"k1" => 0.75, "b" => 1.5, "avgdoclen" => 10,
 				".match" => "docfeat" ]);
-	}
 	$queryeval->addSummarizer(
 			"TITLE", "attribute", [
 			"name" => "title" ] );
