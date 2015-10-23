@@ -26,7 +26,7 @@ CONFIGDIR=/home/patrick/Projects/github/ellokal_image_gallery/config
 
 getPictureXml $TIMSTMP > $INPFILE
 strusCreate -S $CONFIGDIR/storage.conf
-strusInsert -r "localhost:7181" -L "$LOGFILE" -c 20000 $CONFIGDIR/pictures.ana $INPFILE
+strusInsert -S $CONFIGDIR/storage.conf -L "$LOGFILE" -c 20000 $CONFIGDIR/pictures.ana $INPFILE
 
 
 
