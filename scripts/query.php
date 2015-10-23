@@ -65,6 +65,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 
 	// Closing connection
 	pg_close($dbconn);
+	return $rt;
 }
 
 function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
