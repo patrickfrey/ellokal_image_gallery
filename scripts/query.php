@@ -112,6 +112,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$query->setMaxNofRanks( $maxNofRanks);
 	$query->setMinRank( $minRank);
 	$results = $query->evaluate();
+	var_dump( count( $results));
 	$idlist = [];
 	$summarylist = [];
 	$weightlist = [];
@@ -136,6 +137,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$weightlist[ $id] = $result->weight;
 	}
 	$dbres = evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks);
+	var_dump( count( $dbres));
 	$results = [];
 	foreach ($dbres as &$dbrow)
 	{
@@ -218,7 +220,6 @@ try {
 	echo '</div>';
 
 	var_dump( count( $results));
-	var_dump( $results);
 	foreach ($results as &$result)
 	{
 		echo '<div id="search_rank">';
