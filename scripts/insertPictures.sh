@@ -27,23 +27,6 @@ processImage() {
 	CONCERTDATE=`basename "$DIRECTORY" | awk -F '_' '{print $1}' | sed 's/\./-/' | sed 's/\./-/'`
 	CONCERTNAME=`basename "$DIRECTORY" | awk -F '_' '{print $2}'`
 
-	echo "-------------------------------------";
-	echo "FILENAME='$FILENAME'";
-	echo "WIDTH='$WIDTH'";
-	echo "LENGTH='$LENGTH'";
-	echo "BRENNWEITE='$BRENNWEITE'";
-	echo "BLENDE='$BLENDE'";
-	echo "EXPTIME='$EXPTIME'";
-	echo "DATETIME='$DATETIME'";
-	echo "PROGRAM='$PROGRAM'";
-	echo "RESOLUTION_X='$RESOLUTION_X'";
-	echo "RESOLUTION_Y='$RESOLUTION_Y'";
-	echo "META='$META'";
-	echo "FOTOGRAPHER='$FOTOGRAPHER'";
-	echo "TIMSTMP='$TIMSTMP'";
-	echo "CONCERTDATE='$CONCERTDATE'";
-	echo "CONCERTNAME='$CONCERTNAME'";
-
 	echo "INSERT INTO Concert (date,title) SELECT '$CONCERTDATE', '$CONCERTNAME' WHERE NOT EXISTS (SELECT * FROM Concert WHERE date='$CONCERTDATE' AND title='$CONCERTNAME');"
 	echo "INSERT INTO ConcertPicture (concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename) SELECT id,'$BRENNWEITE','$BLENDE','$EXPTIME','$TIMSTMP','$DATETIME','$PROGRAM','$RESOLUTION_X','$RESOLUTION_Y','$WIDTH','$LENGTH','$META','$FOTOGRAPHER','$THUMBNAIL','$FILENAME' FROM Concert WHERE date='$CONCERTDATE' AND title='$CONCERTNAME';"
 }
@@ -60,12 +43,8 @@ else
 	find $DATADIR/[0-9]* -name "*.jpg" > $INPLIST
 fi
 while read filename <&3; do
-	echo "+++ PROCESS $filename"
-	processImage "$filename"
-	# | psql --log-file="$LOGFILE" -d ellokal -h localhost -f-
+	processImage "$filename" | psql --log-file="$LOGFILE" -d ellokal -h localhost -f-
 done 3< $INPLIST
 touch "$LASTUPD"
-
-
 
 
