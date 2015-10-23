@@ -22,7 +22,7 @@ fi
 FSTMP="`date +'%y%m%d'`_`date +'%H%M%S'`"
 LOGFILE="/var/log/ellokal/insert_picture_$FSTMP.log"
 INPFILE="/var/log/ellokal/indert_picture_$FSTMP.xml"
-CONFIGDIR=/home/patrick/Projects/github/ellokal_image_gallery/config
+CONFIGDIR=./config
 
 getPictureXml $TIMSTMP > $INPFILE
 strusCreate -S $CONFIGDIR/storage.conf
