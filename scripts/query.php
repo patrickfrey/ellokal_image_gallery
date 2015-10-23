@@ -142,7 +142,9 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$dbres = evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks);
 	echo( "DB RES ");
 	var_dump( count( $dbres));
+	$nofresults = count( $dbres);
 	$results = [];
+	$ridx = 0;
 	foreach ($dbres as &$dbrow)
 	{
 		$accures = $dbrow;
@@ -152,7 +154,8 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		var_dump( intval( $dbrow[0]));
 		var_dump( $weight);
 		$accures[] = $weight;
-		$results[ $weight] = $accures;
+		$results[ ($weight + 1) * $nofresults + $ridx] = $accures;
+		++$ridx;
 	}
 	krsort( $results);
 	echo( "SORTED RES ");
