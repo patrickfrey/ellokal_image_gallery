@@ -215,6 +215,7 @@ try {
 	echo '</div>';
 	echo '</div>';
 
+	var_dump( count( $results));
 	foreach ($results as &$result)
 	{
 		echo '<div id="search_rank">';
