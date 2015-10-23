@@ -43,11 +43,12 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 	}
 	var_dump( $dbquery);
 	$result = pg_query( $dbquery);
-	var_dump( $result);
+	$nof_results = pg_num_rows( $result);
 	if (!$result)
 	{
 		throw new Exception( 'Database error: ' . pg_last_error());
 	}
+	var_dump( $nof_results);
 	// Printing results in HTML
 	$lastRank = $minRank + $maxNofRanks -1;
 	$ridx = 0;
