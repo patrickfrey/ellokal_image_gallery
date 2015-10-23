@@ -51,7 +51,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 	// Printing results in HTML
 	$lastRank = $minRank + $maxNofRanks -1;
 	$ridx = 0;
-	while ($row = pg_fetch_array( $result, null, PGSQL_NUM))
+	while ($row = pg_fetch_row( $result))
 	{
 		var_dump( $row);
 		if ($ridx > $lastRank) break;
