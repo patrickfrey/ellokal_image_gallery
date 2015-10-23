@@ -116,6 +116,8 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$idlist = [];
 	$summarylist = [];
 	$weightlist = [];
+	echo "RESULTS: ";
+	var_dump( $results);
 	foreach ($results as &$result)
 	{
 		$id = 0;
