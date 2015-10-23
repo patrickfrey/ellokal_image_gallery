@@ -112,8 +112,6 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$query->setMaxNofRanks( $maxNofRanks);
 	$query->setMinRank( $minRank);
 	$results = $query->evaluate();
-	echo( "STRUS RES ");
-	var_dump( count( $results));
 	$idlist = [];
 	$summarylist = [];
 	$weightlist = [];
@@ -137,11 +135,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$summarylist[ $id] = $summary;
 		$weightlist[ $id] = $result->weight;
 	}
-	echo( "WEIGHTS ");
-	var_dump( $weightlist);
 	$dbres = evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks);
-	echo( "DB RES ");
-	var_dump( count( $dbres));
 	$nofresults = count( $dbres);
 	$results = [];
 	$ridx = 0;
@@ -150,16 +144,11 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$accures = $dbrow;
 		$accures[] = $summarylist[ intval( $dbrow[0])];
 		$weight = $weightlist[ intval( $dbrow[0])];
-		echo( "WEIGHT ");
-		var_dump( intval( $dbrow[0]));
-		var_dump( $weight);
 		$accures[] = $weight;
 		$results[ ($weight + 1) * $nofresults + $ridx] = $accures;
 		++$ridx;
 	}
 	krsort( $results);
-	echo( "SORTED RES ");
-	var_dump( $results);
 	return $results;
 }
 
@@ -232,14 +221,19 @@ try {
 	echo '</div>';
 	echo '</div>';
 
-	echo( "ALL RES ");
-	var_dump( count( $results));
 	foreach ($results as $weight => $result)
 	{
 		echo '<div id="search_rank">';
 		foreach ($result as $colidx => $col)
 		{
-			echo '<div id="rank_elem" weight=$weight>' . $resultcols[$colidx] . " =  $col</div>";
+			if ($resultcols[$colidx] == "thumbnail")
+			{
+				// echo '<div id="rank_elem" weight=$weight>' . $resultcols[$colidx] . " =  $col</div>";
+			}
+			else
+			{
+				echo '<div id="rank_elem" weight=$weight>' . $resultcols[$colidx] . " =  $col</div>";
+			}
 		}
 		echo '</div>';
 	}
@@ -251,7 +245,6 @@ try {
 	if ($prevMinRank >= 0)
 	{
 		echo '<form name="prev" class method="GET" action="query.php">';
-		
 		echo "<input type=\"hidden\" name=\"q\" value=\"$queryString\"/>";
 		echo "<input type=\"hidden\" name=\"n\" value=\"$nofRanks\"/>";
 		echo "<input type=\"hidden\" name=\"i\" value=\"$prevMinRank\"/>";
