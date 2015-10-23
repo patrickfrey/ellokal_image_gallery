@@ -191,6 +191,7 @@ try {
 	{
 		$scheme = "db";
 	}
+	$results = [];
 	if ($scheme == "db")
 	{
 		$results = evalDatabaseQuery( $context, [], $minRank, $nofRanks);
