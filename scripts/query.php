@@ -13,10 +13,10 @@
 <?php
 require "strus.php";
 
-$resultcols = ("id","concertId","focaldist","apperture","shutterspeed","insertdate","eventdate","program","resolution_X","resolution_Y","width","length","meta","fotographer","thumbnail","filename","summary","weight");
+$resultcols = ["id","concertId","focaldist","apperture","shutterspeed","insertdate","eventdate","program","resolution_X","resolution_Y","width","length","meta","fotographer","thumbnail","filename","summary","weight"];
 function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 {
-	$rt = ();
+	$rt = [];
 	// Connecting, selecting database
 	$dbconn = pg_connect("host=localhost dbname=ellokal") or die('Could not connect: ' . pg_last_error());
 
@@ -106,9 +106,9 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$query->setMaxNofRanks( $maxNofRanks);
 	$query->setMinRank( $minRank);
 	$results = $query->evaluate();
-	$idlist = ();
-	$summarylist = ();
-	$weightlist = ();
+	$idlist = [];
+	$summarylist = [];
+	$weightlist = [];
 	foreach ($results as &$result)
 	{
 		$id = 0;
