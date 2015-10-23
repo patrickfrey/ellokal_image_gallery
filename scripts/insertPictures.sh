@@ -49,7 +49,7 @@ else
 	find $DATADIR/[0-9]* -name "*.jpg" > $INPLIST
 fi
 while read filename <&3; do
-	processImage "$filename" | psql --log-file="$LOGFILE" -U strus -d ellokaldb -h localhost -f-
+	processImage "$filename" | psql --log-file="$LOGFILE" -d ellokal -h localhost -f-
 done 3< $INPLIST
 touch "$LASTUPD"
 
