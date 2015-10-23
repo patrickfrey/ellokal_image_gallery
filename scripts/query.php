@@ -41,22 +41,17 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 	{
 		$dbquery .= " WHERE " . $whereclause;
 	}
-	var_dump( $dbquery);
 	$result = pg_query( $dbquery);
 	$nof_results = pg_num_rows( $result);
 	if (!$result)
 	{
 		throw new Exception( 'Database error: ' . pg_last_error());
 	}
-	var_dump( $nof_results);
-	var_dump( $minRank);
-	var_dump( $maxNofRanks);
 	// Printing results in HTML
 	$lastRank = $minRank + $maxNofRanks - 1;
 	$ridx = 0;
 	while ($row = pg_fetch_row( $result))
 	{
-		var_dump( $row);
 		if ($ridx > $lastRank) break;
 		if ($ridx >= $minRank)
 		{
@@ -206,13 +201,11 @@ try {
 	{
 		$results = evalDatabaseQuery( $context, [], $minRank, $nofRanks);
 		$schemeDatabase_checked = "checked";
-		var_dump( $results);
 	}
 	else
 	{
 		$results = evalStrusQuery( $context, $queryString, $minRank, $nofRanks);
 		$schemeStrus_checked = "checked";
-		var_dump( $results);
 	}
 	echo '<form name="search" class method="GET" action="query.php">';
 	echo "<input id=\"search_input\" class=\"textinput\" type=\"text\" maxlength=\"256\" size=\"32\" name=\"q\" tabindex=\"1\" value=\"$queryString\"/>";
