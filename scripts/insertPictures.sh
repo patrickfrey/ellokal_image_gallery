@@ -1,7 +1,7 @@
 #!/bin/bash
 
 imageTag() {
-	exif "$1" | awk -F '|' '{gsub(/[ \t]+$/, "", $1); print $1 "=" $2}' | awk -F'=' "/$2[=]/"'{print $2}' | head -n 1
+	exiftool "$1" | awk -F '|' '{gsub(/[ \t]+$/, "", $1); print $1 "=" $2}' | awk -F'=' "/$2[=]/"'{print $2}' | head -n 1
 }
 
 thumbnail() {
