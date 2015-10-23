@@ -240,7 +240,7 @@ try {
 				echo '<br/>';
 			}
 		}
-		</p>
+		echo '</p>';
 		echo '</div>';
 		echo '</div>';
 	}
