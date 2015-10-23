@@ -149,7 +149,7 @@ try {
 	$queryString = "";
 	$minRank = 0;
 	$nofRanks = 20;
-	$scheme = "db";
+	$scheme = "";
 	if (PHP_SAPI == 'cli')
 	{
 		# ... called from command line (CLI)
@@ -183,15 +183,18 @@ try {
 		{
 			$scheme = $_GET['s'];
 		}
-		$queryString = $_GET['q'];
+		if (array_key_exists( 'q', $_GET))
+		{
+			$queryString = $_GET['q'];
+		}
+	}
+	if ($queryString == '' && $scheme == '')
+	{
+		$scheme = "db";
 	}
 	$context = new StrusContext( "localhost:7181" );
 	$schemeDatabase_checked = "";
 	$schemeStrus_checked = "";
-	if ($queryString == '')
-	{
-		$scheme = "db";
-	}
 	$results = [];
 	var_dump( $scheme);
 	var_dump( $queryString);
