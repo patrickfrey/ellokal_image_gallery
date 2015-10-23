@@ -225,16 +225,15 @@ try {
 	{
 		echo '<div id="search_rank">';
 
+		echo '<div id="rank_thumbnail">';
+		echo '<img alt="Thumbnail" src="data:image/png;base64,' . $result[14] . '" />';
+		echo '</div>';
+
 		foreach ($result as $colidx => $col)
 		{
-			if ($colidx == 14)
+			if ($colidx != 14)
 			{
-				echo '<div id="rank_thumbnail">';
-				echo '<img alt="Thumbnail" src="data:image/png;base64,' . $resultcols[ $colidx] . '" />';
-				echo '</div>';
-			}
-			else
-			{
+				// not a thumbnail
 				echo '<div id="rank_elem" weight=$weight>' . $resultcols[$colidx] . " =  $col</div>";
 			}
 		}
