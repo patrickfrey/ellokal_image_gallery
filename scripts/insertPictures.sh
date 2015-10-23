@@ -5,9 +5,9 @@ imageTag() {
 }
 
 thumbnail() {
-	exif -e "$1" > /dev/null
-	RES=`base64 "$1.modified.jpeg"` 
-	rm -f "$1.modified.jpeg"
+	exiftool -b -ThumbnailImage "$1" > "$1.thumbnail.jpg"
+	RES=`base64 "$1.thumbnail.jpg"` 
+	rm -f "$1.thumbnail.jpg"
 	echo $RES
 }
 
