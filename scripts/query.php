@@ -143,7 +143,8 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$dbrow[] = $weight;
 		$results[ $weight] = $dbrow;
 	}
-	return krsort( $results);
+	krsort( $results);
+	return $results;
 }
 
 try {
@@ -220,9 +221,9 @@ try {
 	foreach ($results as &$result)
 	{
 		echo '<div id="search_rank">';
-		foreach ($result as &$attr)
+		foreach ($result as $key => $item)
 		{
-			echo '<div id="rank_elem">' . "$attr</div>";
+			echo '<div id="rank_elem" weight=$key>' . "$item</div>";
 		}
 		echo '</div>';
 	}
