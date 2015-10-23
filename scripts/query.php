@@ -135,7 +135,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 			}
 		}
 		$summarylist[ $id] = $summary;
-		$weightlist[ $id] = $result->weight;
+		$weightlist[ intval($id)] = $result->weight;
 	}
 	$dbres = evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks);
 	echo( "DB RES ");
