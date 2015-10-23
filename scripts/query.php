@@ -49,8 +49,10 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 		throw new Exception( 'Database error: ' . pg_last_error());
 	}
 	var_dump( $nof_results);
+	var_dump( $minRank);
+	var_dump( $maxNofRanks);
 	// Printing results in HTML
-	$lastRank = $minRank + $maxNofRanks -1;
+	$lastRank = $minRank + $maxNofRanks - 1;
 	$ridx = 0;
 	while ($row = pg_fetch_row( $result))
 	{
