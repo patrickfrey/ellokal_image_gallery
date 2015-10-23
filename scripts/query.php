@@ -142,9 +142,11 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$ridx = 0;
 	foreach ($dbres as &$dbrow)
 	{
+		$id = intval( $dbrow[0]);
 		$accures = $dbrow;
-		$accures[] = $summarylist[ intval( $dbrow[0])];
-		$weight = $weightlist[ intval( $dbrow[0])];
+		$accures[] = $summarylist[ $id];
+		var_dump( $accures);
+		$weight = $weightlist[ $id];
 		$accures[] = $weight;
 		$results[ number_format ( $weight, 7) . ',' . $ridx] = $accures;
 		++$ridx;
@@ -230,19 +232,18 @@ try {
 		echo '<img alt="Thumbnail" src="data:image/png;base64,' . $result[14] . '" />';
 		echo '</div>';
 
-		echo '<div id="rank_attr"><p>';
+		echo '<div id="rank_attr">';
 		foreach ($result as $colidx => $col)
 		{
 			if ($colidx != 14)
 			{
 				// not a thumbnail
-				echo $textcols[$colidx] . ": $col";
-				echo '<br/>';
+				echo $textcols[$colidx] . ": $col ";
 			}
 		}
-		echo '</p>';
 		echo '</div>';
 		echo '</div>';
+		echo "\n";
 	}
 	echo '</div>';
 	echo '<div id="navigation_form">';
