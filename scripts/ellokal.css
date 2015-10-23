@@ -74,6 +74,11 @@ h1 {
 	width: 80%;
 }
 
+#rank_thumbnail {
+	width:100px;
+	height:100px;
+}
+
 #footer {
 	display: table;
 	width: 80%;
