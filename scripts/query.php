@@ -114,7 +114,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$query->setMaxNofRanks( $maxNofRanks);
 	$query->setMinRank( $minRank);
 	$results = $query->evaluate();
-	$idlist = [];
+	$idlist = [ 0 ];
 	$summarylist = [];
 	$weightlist = [];
 	echo "RESULTS: ";
