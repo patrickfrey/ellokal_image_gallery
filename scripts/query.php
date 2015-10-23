@@ -135,7 +135,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$summarylist[ $id] = $summary;
 		$weightlist[ $id] = $result->weight;
 	}
-	$dbres = evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks);
+	$dbres = evalDatabaseQuery( $context, $idlist, $idlist, $minRank, $maxNofRanks);
 	foreach ($dbres as &$result)
 	{
 		$result[] = $summarylist[ intval( $dbres['id'])];
@@ -193,7 +193,7 @@ try {
 	}
 	if ($scheme == "db")
 	{
-		$results = evalDatabaseQuery( $context, $minRank, $nofRanks);
+		$results = evalDatabaseQuery( $context, [], $minRank, $nofRanks);
 		$schemeDatabase_checked = "checked";
 	}
 	else
