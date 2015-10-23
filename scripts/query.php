@@ -52,6 +52,7 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 	$ridx = 0;
 	while ($row = pg_fetch_array( $result, null, PGSQL_ASSOC))
 	{
+		var_dump( $row);
 		if ($ridx > $lastRank) break;
 		if ($ridx >= $minRank)
 		{
