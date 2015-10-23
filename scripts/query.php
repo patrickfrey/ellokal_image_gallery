@@ -227,7 +227,7 @@ try {
 
 		foreach ($result as $colidx => $col)
 		{
-			if ($colidx] == "thumbnail")
+			if ($colidx == 14)
 			{
 				echo '<div id="rank_thumbnail">';
 				<img alt="Thumbnail" src="data:image/png;base64,$resultcols[ $colidx]" />
