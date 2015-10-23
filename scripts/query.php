@@ -18,8 +18,11 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 {
 	$rt = [];
 	// Connecting, selecting database
-	$dbconn = pg_connect("host=localhost dbname=ellokal") or die('Could not connect: ' . pg_last_error());
-
+	$dbconn = pg_connect("host=localhost dbname=ellokal");
+	if (!$dbconn)
+	{
+		throw new Exception( 'Could not connect to database: ' . pg_last_error());
+	}
 	// Performing SQL query
 	$query = 'SELECT id,concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename FROM ConcertPicture';
 	$whereclause = '';
@@ -38,8 +41,11 @@ function evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks)
 	{
 		$query .= " WHERE " . $whereclause;
 	}
-	$result = pg_query( $query) or throw new Exception( 'Database error: ' . pg_last_error());
-
+	$result = pg_query( $query);
+	if (!$result)
+	{
+		throw new Exception( 'Database error: ' . pg_last_error());
+	}
 	// Printing results in HTML
 	$lastRank = $minRank + $maxNofRanks -1;
 	$ridx = 0;
