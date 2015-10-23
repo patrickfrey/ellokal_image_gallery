@@ -10,7 +10,7 @@ getPictureXmlSelect() {
 getPictureXml() {
 	echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
 	echo '<list>'
-	getPictureXmlSelect "$1" | psql --tuples-only -U strus -d ellokaldb -h localhost -f-
+	getPictureXmlSelect "$1" | psql --tuples-only -d ellokal -h localhost -f-
 	echo '</list>'
 }
 
