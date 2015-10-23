@@ -21,7 +21,7 @@ fi
 
 FSTMP="`date +'%y%m%d'`_`date +'%H%M%S'`"
 LOGFILE="/var/log/ellokal/insert_picture_$FSTMP.log"
-INPFILE="/var/log/ellokal/indert_picture_$FSTMP.xml"
+INPFILE="/var/log/ellokal/insert_picture_$FSTMP.xml"
 CONFIGDIR=./config
 
 getPictureXml $TIMSTMP > $INPFILE

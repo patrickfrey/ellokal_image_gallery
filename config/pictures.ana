@@ -28,7 +28,7 @@
 	eventdate = orig content /list/item/eventdate();
 	width = orig content /list/item/width();
 	length = orig content /list/item/length();
-	fotograph = orig content /list/item/fotograph();
+	fotographer = orig content /list/item/fotograph();
 	thumbnail = orig content /list/item/thumbnail();
 	filename = orig content /list/item/filename();
 
