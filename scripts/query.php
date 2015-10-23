@@ -100,7 +100,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	{
 		foreach ($terms as &$term)
 		{
-			$query->pushTerm( "stem", $term->value);
+			$query->pushTerm( "word_de", $term->value);
 			$query->pushDuplicate();
 			$query->defineFeature( "docfeat");
 		}
@@ -113,8 +113,10 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$idlist = [];
 	$summarylist = [];
 	$weightlist = [];
+	var_dump( "-------------------");
+	var_dump( $terms);
 	var_dump( $results);
-	var_dump( "WWWWWWWWWWWWWWWWWWWWW");
+	var_dump( "-------------------");
 	foreach ($results as &$result)
 	{
 		$id = 0;
