@@ -10,17 +10,17 @@ thumbnail() {
 processImage() {
 	FILENAME=`echo "$1" | sed 's@/data/ellokal.project-strus.net/@@'`
 	THUMBNAIL=`thumbnail "$1"`
-	WIDTH=`exiftool -ImageWidth "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	LENGTH=`exiftool -ImageHeight "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	BRENNWEITE=`exiftool -FocalLength "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	BLENDE=`exiftool -FNumber "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	EXPTIME=`exiftool -ExposureTime "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	DATETIME=`exiftool -DateTimeOriginal "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	PROGRAM=`exiftool -ExposureProgram "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	RESOLUTION_X=`exiftool -XResolution "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	RESOLUTION_Y=`exiftool -YResolution "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	META=`exiftool -ImageDescription "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
-	FOTOGRAPHER=`exiftool -Artist "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}'`
+	WIDTH=`exiftool -ImageWidth "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	LENGTH=`exiftool -ImageHeight "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	BRENNWEITE=`exiftool -FocalLength "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	BLENDE=`exiftool -FNumber "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	EXPTIME=`exiftool -ExposureTime "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	DATETIME=`exiftool -DateTimeOriginal "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	PROGRAM=`exiftool -ExposureProgram "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	RESOLUTION_X=`exiftool -XResolution "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	RESOLUTION_Y=`exiftool -YResolution "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	META=`exiftool -ImageDescription "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
+	FOTOGRAPHER=`exiftool -Artist "$1" | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //'`
 	TIMSTMP="`date +'%Y-%m-%d %H:%M:%S'`"
 
 	DIRECTORY="`dirname 'data/2014.08.25_howe gelb/D800E_040396.jpg'`"
