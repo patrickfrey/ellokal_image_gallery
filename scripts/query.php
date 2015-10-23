@@ -97,7 +97,6 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 
 	$query = $queryeval->createQuery( $storage);
 	$terms = $analyzer->analyzePhrase( "text", $queryString);
-	var_dump( $terms);
 	if (count( $terms) > 0)
 	{
 		foreach ($terms as &$term)
@@ -115,7 +114,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$idlist = [];
 	$summarylist = [];
 	$weightlist = [];
-	var_dump( $result);
+	var_dump( $results);
 	foreach ($results as &$result)
 	{
 		$id = 0;
@@ -185,11 +184,13 @@ try {
 		}
 		$queryString = $_GET['q'];
 	}
-	var_dump( $queryString);
 	$context = new StrusContext( "localhost:7181" );
-	var_dump( $context);
 	$schemeDatabase_checked = "";
 	$schemeStrus_checked = "";
+	if ($queryString == '')
+	{
+		$scheme = "db";
+	}
 	if ($scheme == "db")
 	{
 		$results = evalDatabaseQuery( $context, $minRank, $nofRanks);
@@ -203,8 +204,6 @@ try {
 	echo '<form name="search" class method="GET" action="query.php">';
 	echo "<input id=\"search_input\" class=\"textinput\" type=\"text\" maxlength=\"256\" size=\"32\" name=\"q\" tabindex=\"1\" value=\"$queryString\"/>";
 	echo "<input type=\"hidden\" name=\"n\" value=\"$nofRanks\"/>";
-	echo "<input type=\"radio\" name=\"scheme\" value=\"Database\" $schemeDatabase_checked/>BM25_dpfc";
-	echo "<input type=\"radio\" name=\"scheme\" value=\"BM25\" $schemeStrus_checked/>BM25";
 	echo '<input id="search_button" type="image" src="search_button.jpg" tabindex="2"/>';
 	echo '</form>';
 	echo '</div>';
@@ -231,7 +230,7 @@ try {
 		echo "<input type=\"hidden\" name=\"q\" value=\"$queryString\"/>";
 		echo "<input type=\"hidden\" name=\"n\" value=\"$nofRanks\"/>";
 		echo "<input type=\"hidden\" name=\"i\" value=\"$prevMinRank\"/>";
-		echo "<input type=\"hidden\" name=\"scheme\" value=\"$scheme\"/>";
+		echo "<input type=\"hidden\" name=\"s\" value=\"$scheme\"/>";
 		echo '</form>';
 	}
 	if (count( $results) >= $nofRanks)
@@ -240,7 +239,7 @@ try {
 		echo "<input type=\"hidden\" name=\"q\" value=\"$queryString\">";
 		echo "<input type=\"hidden\" name=\"n\" value=\"$nofRanks\">";
 		echo "<input type=\"hidden\" name=\"i\" value=\"$nextMinRank\">";
-		echo "<input type=\"hidden\" name=\"scheme\" value=\"$scheme\">";
+		echo "<input type=\"hidden\" name=\"s\" value=\"$scheme\">";
 		echo '</form>';
 	}
 	$context->close();
