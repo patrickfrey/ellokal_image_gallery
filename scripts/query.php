@@ -108,7 +108,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 			$query->pushDuplicate();
 			$query->defineFeature( "docfeat");
 		}
-		$query->pushExpression( "within", count($terms), 100000);
+		$query->pushExpression( "contains", count($terms));
 		$query->defineFeature( "selfeat");
 	}
 	$query->setMaxNofRanks( $maxNofRanks);
