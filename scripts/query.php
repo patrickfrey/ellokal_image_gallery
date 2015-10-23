@@ -230,15 +230,18 @@ try {
 		echo '<img alt="Thumbnail" src="data:image/png;base64,' . $result[14] . '" />';
 		echo '</div>';
 
-		echo '<div id="rank_elem" weight=$weight><br/>';
+		echo '<div id="rank_elem" weight=$weight>
+		echo '<p>';
 		foreach ($result as $colidx => $col)
 		{
 			if ($colidx != 14)
 			{
+				echo '<br/>';
 				// not a thumbnail
 				echo $textcols[$colidx] . ": $col";
 			}
 		}
+		</p>
 		echo '</div>';
 		echo '</div>';
 	}
