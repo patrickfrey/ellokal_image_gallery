@@ -224,11 +224,14 @@ try {
 	foreach ($results as $weight => $result)
 	{
 		echo '<div id="search_rank">';
+
 		foreach ($result as $colidx => $col)
 		{
-			if ($resultcols[$colidx] == "thumbnail")
+			if ($colidx] == "thumbnail")
 			{
-				// echo '<div id="rank_elem" weight=$weight>' . $resultcols[$colidx] . " =  $col</div>";
+				echo '<div id="rank_thumbnail">';
+				<img alt="Thumbnail" src="data:image/png;base64,$resultcols[ $colidx]" />
+				echo '</div>';
 			}
 			else
 			{
