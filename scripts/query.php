@@ -135,7 +135,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 			}
 		}
 		$summarylist[ $id] = $summary;
-		$weightlist[ intval($id)] = $result->weight;
+		$weightlist[ $id] = $result->weight;
 	}
 	echo( "WEIGHTS ");
 	var_dump( $weightlist);
@@ -231,12 +231,12 @@ try {
 
 	echo( "ALL RES ");
 	var_dump( count( $results));
-	foreach ($results as &$result)
+	foreach ($results as $weight => $result)
 	{
 		echo '<div id="search_rank">';
-		foreach ($result as $key => $item)
+		foreach ($result as $colidx => $col)
 		{
-			echo '<div id="rank_elem" weight=$key>' . "$item</div>";
+			echo '<div id="rank_elem" weight=$weight>' . $resultcols[$colidx] . " =  $col</div>";
 		}
 		echo '</div>';
 	}
