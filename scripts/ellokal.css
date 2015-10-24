@@ -24,7 +24,8 @@ h1 {
 #search_input {
 	display: table-cell;
 	align: top;
-	width: 45%;
+	width: 60%;
+	display: block;
 }
 
 #search_button {
