@@ -146,8 +146,8 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$accures = $dbrow;
 		$accures[] = $summarylist[ $id];
 		$weight = $weightlist[ $id];
-		$accures[] = number_format ( $weight, 4);
-		$results[ number_format ( $weight, 7) . ',' . $ridx] = $accures;
+		$accures[] = number_format( $weight, 4);
+		$results[ number_format( $weight, 7) . ',' . $ridx] = $accures;
 		++$ridx;
 	}
 	krsort( $results);
