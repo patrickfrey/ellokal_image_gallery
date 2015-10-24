@@ -64,15 +64,16 @@ h1 {
 	display: table-cell;
 	font-size:0.7em;
 	align: center;
-	width: 30%;
+	width:200px;
 }
 
 #rank_summary {
 	display: table-cell;
 	color:#668888;
+	align: center;
 	font-size:1.1em;
 	line-height:1.2em;
-	width: 30%;
+	width:200px;
 }
 
 #rank_thumbnail {
