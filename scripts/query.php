@@ -223,30 +223,44 @@ try {
 	echo '</div>';
 	echo '</div>';
 	echo "\n";
-	echo '<div id="search_ranklist">';
+	//echo '<div id="search_ranklist">';
+	echo "<table>\n";
 
 	foreach ($results as $weight => $result)
 	{
-		echo '<div id="search_rank">';
+		//echo '<div id="search_rank">';
+		//echo "\n";
 
-		echo '<div id="rank_thumbnail">';
+		//echo '<div id="rank_thumbnail">';
+		//echo '<img alt="Thumbnail" src="data:image/png;base64,' . $result[14] . '" />';
+		//echo '</div>';
+
+		//echo '<div id="rank_attr">';
+
+		echo "<tr><td>";
 		echo '<img alt="Thumbnail" src="data:image/png;base64,' . $result[14] . '" />';
-		echo '</div>';
-
-		echo '<div id="rank_attr">';
+		echo "</td>";
+		echo "<td>";
+		echo "<p>$result[16]</p>";
+		echo "</td>";
+		echo "<td>";
 		foreach ($result as $colidx => $col)
 		{
-			if ($colidx != 14)
+			if ($colidx != 14/*thumbnail*/ && $colidx != 16/*summary*/)
 			{
 				// not a thumbnail
 				echo $textcols[$colidx] . ": $col ";
 			}
 		}
-		echo '</div>';
-		echo '</div>';
+		
+		echo "</td></tr>";
+
+		//echo '</div>';
+		//echo '</div>';
 		echo "\n";
 	}
-	echo '</div>';
+	echo "</table>\n";
+	// echo '</div>';
 	echo '<div id="navigation_form">';
 	echo '<div id="navigation_elements">';
 	$nextMinRank = $minRank + $nofRanks;
