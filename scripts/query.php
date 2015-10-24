@@ -77,7 +77,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 
 	$analyzer->definePhraseType( "text", "word_de", "word",
 			["lc",
-			["stem", "en"],
+			["stem", "de"],
 			["convdia", "en"],
 			"lc"]);
 
