@@ -83,7 +83,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 
 	$queryeval->addTerm( "sentence", "sent", "");
 	$queryeval->addWeightingFunction( 1.0, "BM25", [
-				"k1" => 0.75, "b" => 1.5, "avgdoclen" => 10,
+				"k1" => 1.5, "b" => 2.1, "avgdoclen" => 10,
 				".match" => "docfeat" ]);
 	$queryeval->addSummarizer(
 			"TITLE", "attribute", [
@@ -146,7 +146,7 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$accures = $dbrow;
 		$accures[] = $summarylist[ $id];
 		$weight = $weightlist[ $id];
-		$accures[] = $weight;
+		$accures[] = number_format ( $weight, 4);
 		$results[ number_format ( $weight, 7) . ',' . $ridx] = $accures;
 		++$ridx;
 	}
