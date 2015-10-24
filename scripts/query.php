@@ -103,7 +103,6 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	{
 		foreach ($terms as &$term)
 		{
-			var_dump( $term);
 			$query->pushTerm( "word_de", $term->value);
 			$query->pushDuplicate();
 			$query->defineFeature( "docfeat");
@@ -117,8 +116,6 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 	$idlist = [ 0 ];
 	$summarylist = [];
 	$weightlist = [];
-	echo "RESULTS: ";
-	var_dump( $results);
 	foreach ($results as &$result)
 	{
 		$id = 0;
@@ -138,8 +135,6 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		}
 		$summarylist[ $id] = $summary;
 		$weightlist[ $id] = $result->weight;
-		echo "SUMMARIES: ";
-		var_dump( $summarylist);
 	}
 	$dbres = evalDatabaseQuery( $context, $idlist, $minRank, $maxNofRanks);
 	$nofresults = count( $dbres);
@@ -150,9 +145,6 @@ function evalStrusQuery( $context, $queryString, $minRank, $maxNofRanks)
 		$id = intval( $dbrow[0]);
 		$accures = $dbrow;
 		$accures[] = $summarylist[ $id];
-		echo "SUMMARY: ";
-		var_dump( $id);
-		var_dump( $summarylist[ $id]);
 		$weight = $weightlist[ $id];
 		$accures[] = $weight;
 		$results[ number_format ( $weight, 7) . ',' . $ridx] = $accures;
