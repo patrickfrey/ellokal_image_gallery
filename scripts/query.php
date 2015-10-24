@@ -222,6 +222,7 @@ try {
 	echo '</form>';
 	echo '</div>';
 	echo '</div>';
+	echo "\n";
 	echo '<div id="search_ranklist">';
 
 	foreach ($results as $weight => $result)
