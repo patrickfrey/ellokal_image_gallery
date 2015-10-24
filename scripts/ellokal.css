@@ -54,6 +54,7 @@ h1 {
 
 #search_ranklist {
 	display: table;
+	border: 1;
 }
 
 #search_rank {
@@ -62,13 +63,15 @@ h1 {
 
 #rank_attr {
 	display: table-cell;
+	vertical-align:top;
 	font-size:0.7em;
 	align: center;
-	width:200px;
+	width:300px;
 }
 
 #rank_summary {
 	display: table-cell;
+	vertical-align:top;
 	color:#668888;
 	align: center;
 	font-size:1.1em;
