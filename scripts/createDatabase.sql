@@ -1,0 +1,9 @@
+CREATE USER ellokal WITH
+      CONNECTION LIMIT 30
+      PASSWORD '1w5b5ufh';
+
+CREATE DATABASE ellokaldb
+      TEMPLATE template0
+      ENCODING 'UTF8'
+          CONNECTION LIMIT 30;
+

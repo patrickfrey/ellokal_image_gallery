@@ -31,10 +31,9 @@ processImage() {
 	echo "INSERT INTO ConcertPicture (concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename) SELECT id,'$BRENNWEITE','$BLENDE','$EXPTIME','$TIMSTMP','$DATETIME','$PROGRAM','$RESOLUTION_X','$RESOLUTION_Y','$WIDTH','$LENGTH','$META','$FOTOGRAPHER','$THUMBNAIL','$FILENAME' FROM Concert WHERE date='$CONCERTDATE' AND title='$CONCERTNAME';"
 }
 
-DATADIR=/data/ellokal.project-strus.net/
+DATADIR=./data/images/
 TIMSTMP="`date +'%y%m%d'`_`date +'%H%M%S'`"
-LOGFILE="/var/log/ellokal/insert_exif_$TIMSTMP.log"
-INPLIST="/var/log/ellokal/input_exif_$TIMSTMP.txt"
+INPLIST="./input_exif_$TIMSTMP.txt"
 LASTUPD="$DATADIR/.lastUpdate"
 
 if [ -f "$LASTUPD" ]; then
@@ -43,8 +42,11 @@ else
 	find $DATADIR/[0-9]* -name "*.jpg" > $INPLIST
 fi
 while read filename <&3; do
-	processImage "$filename" | psql --log-file="$LOGFILE" -d ellokal -h localhost -f-
+	processImage "$filename"
 done 3< $INPLIST
+
+# LOGFILE="/var/log/ellokal/insert_exif_$TIMSTMP.log"
+# | psql --log-file="$LOGFILE" -d ellokal -h localhost -f-
 touch "$LASTUPD"
 
 
