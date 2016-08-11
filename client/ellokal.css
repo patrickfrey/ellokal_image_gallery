@@ -1,0 +1,47 @@
+#content  {
+	font-family: "Times New Roman", Times, serif;
+	font-style: normal;
+	text-align:left;
+	width:600px;
+	padding-right:40px;
+}
+#content h1 {
+	font-size: 40px;
+}
+
+#content h2 {
+	font-size: 30px;
+}
+
+#content p {
+	font-size: 14px;
+}
+
+#ranklist {
+	font-size:  16px;
+	display:    table;
+	width:      auto;
+}
+#rank {
+	display:    table-row;
+	width:      auto;
+}
+#docno {
+	float:      left;
+	display:    table-column;
+	padding:    0 5px;
+	width:      auto;
+	font-style: bold;
+}
+#title {
+	float:      left;
+	display:    table-column;
+	padding:    0 5px;
+	width:      auto;
+	font-style: italic;
+}
+#searchfield {
+}
+#searchresult {
+}
+
