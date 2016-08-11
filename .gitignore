@@ -1,2 +1,5 @@
 # Test data
 data/
+
+# Compiled artefacts
+*.pyc

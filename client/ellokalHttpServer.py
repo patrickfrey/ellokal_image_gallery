@@ -17,8 +17,10 @@ import unidecode
 import ellokalDatabase
 import ellokalSession
 import ellokalStorage
+import strus
 import json
 
+# Storage instance
 storage = None
 
 # [1] HTTP handlers:
@@ -28,11 +30,38 @@ class QueryHandler( tornado.web.RequestHandler ):
         try:
             session = ellokalSession.EllokalSession( self)
             db = ellokalDatabase.EllokalDatabase()
-            
+            # q = query terms:
+            querystr = self.get_argument( "q", "")
+            # i = firstrank:
+            firstrank = int( self.get_argument( "i", 0))
+            # n = nofranks:
+            nofranks = int( self.get_argument( "n", 8))
+            # d = document number to restrict to:
+            restricts = self.get_argument( "d", "").split()
+            restrictset = []
+            for rs in restricts:
+                restrictset.append( int(rs))
             response = { 'error': None,
-                         'id': storage.evaluateQuery_search( terms, firstrank, nofranks, restrictset):,
-                         'username': user.username,
-                         'email': user.email }
+                         'result': storage.evaluateQuery_search( querystr, firstrank, nofranks, restrictset)
+            }
+            self.write(response)
+        except Exception as e:
+            response = { 'error': str(e) }
+            self.write(response)
+
+class DymHandler( tornado.web.RequestHandler ):
+    @tornado.gen.coroutine
+    def get(self):
+        try:
+            session = ellokalSession.EllokalSession( self)
+            db = ellokalDatabase.EllokalDatabase()
+            # q = query terms:
+            querystr = self.get_argument( "q", "")
+            # n = nofranks:
+            nofranks = int( self.get_argument( "n", 6))
+            response = { 'error': None,
+                         'result': storage.evaluateQuery_dym( querystr, nofranks)
+            }
             self.write(response)
         except Exception as e:
             response = { 'error': str(e) }
@@ -64,11 +93,11 @@ if __name__ == "__main__":
                           metavar="PORT")
 
         (options, args) = parser.parse_args()
-        storage = Storage( options.config)
+        storage = ellokalStorage.Storage( options.config)
         myport = int(options.port)
 
         # Start server:
-        print( "Starting server on port %u with config %s... " % (myport,myconfig) )
+        print( "Starting server on port %u with config %s... " % (myport,options.config) )
         application.listen( myport )
         print( "Listening on port %u" % myport )
         ioloop = tornado.ioloop.IOLoop.current()

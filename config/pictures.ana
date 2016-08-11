@@ -10,7 +10,7 @@
 	word_de = convdia(de):stem(de):lc  word  /list/item/meta();
 	word_de = convdia(de):stem(de):lc  word  /list/item/description_de();
 
-	ngram_title = ngram:lc word /list/item/title();
+	ngram_title = ngram(WithStart,3):lc word /list/item/title();
 
 [ForwardIndex]
 	orig = orig split /list/item/title();
@@ -26,11 +26,15 @@
 [Attribute]
 	docid = orig content /list/item/id();
 	title = orig content /list/item/title();
-	insertdate = orig content /list/item/insertdate();
-	eventdate = orig content /list/item/eventdate();
-	width = orig content /list/item/width();
-	length = orig content /list/item/length();
-	fotographer = orig content /list/item/fotograph();
-	thumbnail = orig content /list/item/thumbnail();
-	filename = orig content /list/item/filename();
+#	insertdate = orig content /list/item/insertdate();
+#	eventdate = orig content /list/item/eventdate();
+#	width = orig content /list/item/width();
+#	length = orig content /list/item/length();
+#	fotographer = orig content /list/item/fotograph();
+#	thumbnail = orig content /list/item/thumbnail();
+#	filename = orig content /list/item/filename();
+
+[Aggregator]
+	maxpos_title = maxpos( tist);
+	doclen = count( stem);
 

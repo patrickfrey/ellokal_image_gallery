@@ -27,14 +27,12 @@ class EllokalDatabase:
         whereclause = ''
         if (idlist):
             whereclause += "id IN ("
-            idx = 0
-            for id in idlist:
-                if (idx++ > 0):
+            for idx,id in enumerate(idlist):
+                if (idx > 0):
                     whereclause += ','
                 whereclause += string(id)
             whereclause += ")"
             dbquery += " WHERE " + whereclause
-        }
         self.cursor.execute( dbquery )
         result = self.cursor.fetchmany( startindex + nofranks)
         raise tornado.gen.Return( result[ startindex: ] )
