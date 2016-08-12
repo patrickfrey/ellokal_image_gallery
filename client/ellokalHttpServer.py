@@ -19,6 +19,8 @@ import ellokalSession
 import ellokalStorage
 import strus
 import json
+import inspect
+import pprint
 
 # Storage instance
 storage = None
@@ -35,14 +37,16 @@ class QueryHandler( tornado.web.RequestHandler ):
             # i = firstrank:
             firstrank = int( self.get_argument( "i", 0))
             # n = nofranks:
-            nofranks = int( self.get_argument( "n", 8))
+            nofranks = int( self.get_argument( "n", 4))
             # d = document number to restrict to:
             restricts = self.get_argument( "d", "").split()
             restrictset = []
             for rs in restricts:
                 restrictset.append( int(rs))
+            searchresult = storage.evaluateQuery_search( querystr, firstrank, nofranks, restrictset)
+            result = yield db.completePictures( searchresult)
             response = { 'error': None,
-                         'result': storage.evaluateQuery_search( querystr, firstrank, nofranks, restrictset)
+                         'result': result
             }
             self.write(response)
         except Exception as e:

@@ -17,16 +17,21 @@ try
 	$service_url = 'http://127.0.0.1/ellokal/dym'
 			. '?q=' . urlencode($queryString)
 			. '&n=' . urlencode($nofRanks);
-	$response = NULL;
+	$response = array(
+		"error" => "server not running"
+	);
 	$curl = curl_init( $service_url);
 	curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true);
 	$curl_response = curl_exec( $curl);
-	if ($curl_response === false)
+	if (curl_error($curl))
 	{
-		$info = curl_getinfo($curl);
+		$errmsg = curl_error($curl);
 		curl_close($curl);
+		if (!$errmsg) {
+			$errmsg = "unknown server error";
+		}
 		$response = array(
-			"error" => var_export($info)
+			"error" => $errmsg
 		);
 	}
 	else

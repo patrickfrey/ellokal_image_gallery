@@ -32,7 +32,7 @@ class Storage:
         rt.addSummarizer( "matchphrase", {
             "type": "orig", "metadata_title_maxpos": "maxpos_title",
             "windowsize": 40, "sentencesize": 100, "cardinality": 3, "maxdf": 0.2,
-            "matchmark": '$<b>$</b>',
+            "matchmark": '$<b>$</b>', "name_phrase": "summary",
             ".struct": "sentence", ".match": "docfeat", ".para": "para"
         })
         return rt
@@ -96,11 +96,14 @@ class Storage:
         rt = []
         for rank in result.ranks():
             title = ""
+            summary = ""
             for sumelem in rank.summaryElements():
                 if sumelem.name() == 'title':
                     title = sumelem.value()
+                elif sumelem.name() == 'summary':
+                        summary = sumelem.value()
             rt.append( {
-                   'docno':rank.docno(), 'title':title
+                   'weight':rank.weight(), 'docno':rank.docno(), 'title':title, 'summary':summary
             })
         return rt
 

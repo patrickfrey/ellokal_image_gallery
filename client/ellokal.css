@@ -2,7 +2,6 @@
 	font-family: "Times New Roman", Times, serif;
 	font-style: normal;
 	text-align:left;
-	width:600px;
 	padding-right:40px;
 }
 #content h1 {
@@ -18,27 +17,39 @@
 }
 
 #ranklist {
+	padding:    15px;
 	font-size:  16px;
 	display:    table;
+	border-spacing: 10px;
 	width:      auto;
 }
 #rank {
 	display:    table-row;
 	width:      auto;
 }
-#docno {
+#thumbnail {
+	float:    left;
+	display:  table-cell;
+	position: relative;
+	width:    120px;
+	height:   120px;
+	overflow: hidden;
+}
+#prop {
 	float:      left;
-	display:    table-column;
-	padding:    0 5px;
-	width:      auto;
-	font-style: bold;
+	display:    table-cell;
+	position:   relative;
+	width:      300px;
+	font-style: normal;
+}
+#prop ol {
+	list-style-type: none;
 }
 #title {
-	float:      left;
-	display:    table-column;
-	padding:    0 5px;
-	width:      auto;
 	font-style: italic;
+}
+#id,eventdate,dimension {
+	font-style: normal;
 }
 #searchfield {
 }
