@@ -39,7 +39,7 @@
 	float:      left;
 	display:    table-cell;
 	position:   relative;
-	width:      300px;
+	width:      auto;
 	font-style: normal;
 }
 #prop ul {

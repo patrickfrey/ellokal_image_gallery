@@ -148,9 +148,9 @@ class Storage:
         rt = []
         for cd in candidates:
             card = 2
-            if len( term) < 4:
+            if len( term) < 5:
                 card = 1
-            if len( term) < 2:
+            if len( term) < 3:
                 card = 0
             if Storage.hasPrefixMinEditDist( term, cd, card):
                 rt.append( DymItem( cd, candidates[ cd]))
