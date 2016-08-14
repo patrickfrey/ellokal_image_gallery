@@ -52,15 +52,16 @@
 			}
 			else
 			{
-				$('#searchprev').hide();
 				$('#searchnext').hide();
 				if (startindex == 0)
 				{
 					$('#ranklist').html('<div id="message">No result found</div>');
+					$('#searchprev').hide();
 				}
 				else
 				{
 					$('#ranklist').html('<div id="message">No more result found</div>');
+					$('#searchprev').show();
 				}
 			}
 			document.getElementById("startindex").value = startindex;
@@ -151,8 +152,8 @@
 <div id="searchfield">
 	<input type = "text" id = "searchtext" tabindex="0"/>
 	<input type = "button" id = "searchsubmit" tabindex="-1"/>
-	<input type = "button" id = "searchprev" tabindex="-1"/>
 	<input type = "button" id = "searchnext" tabindex="-1"/>
+	<input type = "button" id = "searchprev" tabindex="-1"/>
 	<input type = "hidden" id = "startindex" value="0" tabindex="-1"/>
 	<input type = "hidden" id = "nofranks" value="4" tabindex="-1"/>
 	<div id="DidYouMean">
