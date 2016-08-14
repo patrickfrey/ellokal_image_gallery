@@ -21,7 +21,7 @@
 	font-size:  16px;
 	display:    table;
 	border-spacing: 10px;
-	width:      auto;
+	width:      700px;
 }
 #rank {
 	display:    table-row;
@@ -29,7 +29,7 @@
 }
 #thumbnail {
 	float:    left;
-	display:  table-cell;
+	display:  table-column;
 	position: relative;
 	width:    120px;
 	height:   120px;
@@ -37,7 +37,7 @@
 }
 #prop {
 	float:      left;
-	display:    table-cell;
+	display:    table-column;
 	position:   relative;
 	width:      auto;
 	font-style: normal;
