@@ -172,16 +172,13 @@ class Storage:
             if (term.position() != position):
                 if (position != 0):
                     selexpr[2] = self.getCardinality( len(selexpr)-3)
-                    print "define feature selfeat %s" % selexpr
                     query.defineFeature( "selfeat", selexpr, 1.0 )
                     selexpr = ["contains", 0, 0]
                 position = term.position()
             selexpr.append( [term.type(), term.value()] )
-            print "define feature docfeat %s" % [term.type(), term.value()]
             query.defineFeature( "docfeat", [term.type(), term.value()], 1.0)
 
         selexpr[2] = self.getCardinality( len(selexpr)-3)
-        print "define feature selfeat %s" % selexpr
         query.defineFeature( "selfeat", selexpr, 1.0 )
         query.setMaxNofRanks( nofranks)
 
@@ -193,18 +190,14 @@ class Storage:
             for sumelem in rank.summaryElements():
                 if sumelem.name() == 'title':
                     for elem in string.split( sumelem.value()):
-                        print "+++ title (%s)" % (sumelem.value())
                         weight = candidates.get( elem)
                         if (weight == None or weight < rank.weight()):
                             candidates[ elem] = rank.weight()
-                            print "+++ rank elem (%s, %f)" % (elem,rank.weight())
 
-        print "+++ candidate list {%s}" % (candidates)
         # Get the candidates:
         for term in terms:
             proposals_tmp = []
             cdlist = self.getDymCandidates( term, candidates)
-            print "+++ get candidates for term '%s' on '%s'" % (term,cdlist)
             for cd in cdlist:
                 if proposals:
                     for prp in proposals:
