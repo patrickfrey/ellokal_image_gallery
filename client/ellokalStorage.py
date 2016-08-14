@@ -137,7 +137,7 @@ class Storage:
                 return True
             else:
                 return False
-        return p1==p2 and p1==l1
+        return (p1==p2 or p2==l2) and p1==l1
 
     @staticmethod
     def hasPrefixMinEditDist( s1, s2, dist):
