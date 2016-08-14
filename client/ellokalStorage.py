@@ -53,10 +53,11 @@ class Storage:
         return rt
 
 # Constructor. Initializes the query evaluation schemes and the query and document analyzers:
-    def __init__(self, config):
+    def __init__(self, config_search, config_dym):
         # Open local storage on file with configuration specified:
         self.context = strus.Context()
-        self.storage = self.context.createStorageClient( config )
+	self.storage_search = self.context.createStorageClient( config_search )
+	self.storage_dym = self.context.createStorageClient( config_dym )
         self.queryeval_search = self.createQueryEval_search()         # search = document search
         self.queryeval_dym = self.createQueryEval_dym()               # dym = did you mean ... ?
         self.analyzer = self.context.createQueryAnalyzer()
@@ -80,7 +81,7 @@ class Storage:
             # Return empty result for empty query:
             return []
         queryeval = self.queryeval_search
-        query = queryeval.createQuery( self.storage)
+        query = queryeval.createQuery( self.storage_search)
 
         selexpr = ["contains"]
         for term in terms:
@@ -109,13 +110,9 @@ class Storage:
 
     @staticmethod
     def getCardinality( featlen):
-        if (featlen > 5):
-            return 4
-        elif (featlen > 3):
-            return 3
-        elif (featlen > 2):
+        if (featlen >= 2):
             return 2
-        return featlen
+        return 1
 
     @staticmethod
     def hasPrefixMinEditDist_( s1, p1, s2, p2, dist):
@@ -140,7 +137,7 @@ class Storage:
                 return True
             else:
                 return False
-        return p1==p2
+        return p1==p2 and p1==l1
 
     @staticmethod
     def hasPrefixMinEditDist( s1, s2, dist):
@@ -153,6 +150,8 @@ class Storage:
             card = 2
             if len( term) < 4:
                 card = 1
+            if len( term) < 2:
+                card = 0
             if Storage.hasPrefixMinEditDist( term, cd, card):
                 rt.append( DymItem( cd, candidates[ cd]))
         return rt
@@ -165,7 +164,7 @@ class Storage:
             # Return empty result for empty query:
             return []
         queryeval = self.queryeval_dym
-        query = queryeval.createQuery( self.storage)
+        query = queryeval.createQuery( self.storage_dym)
 
         selexpr = ["contains", 0, 0]
         position = 0
@@ -173,13 +172,16 @@ class Storage:
             if (term.position() != position):
                 if (position != 0):
                     selexpr[2] = self.getCardinality( len(selexpr)-3)
+                    print "define feature selfeat %s" % selexpr
                     query.defineFeature( "selfeat", selexpr, 1.0 )
                     selexpr = ["contains", 0, 0]
                 position = term.position()
             selexpr.append( [term.type(), term.value()] )
+            print "define feature docfeat %s" % [term.type(), term.value()]
             query.defineFeature( "docfeat", [term.type(), term.value()], 1.0)
 
         selexpr[2] = self.getCardinality( len(selexpr)-3)
+        print "define feature selfeat %s" % selexpr
         query.defineFeature( "selfeat", selexpr, 1.0 )
         query.setMaxNofRanks( nofranks)
 
@@ -191,19 +193,30 @@ class Storage:
             for sumelem in rank.summaryElements():
                 if sumelem.name() == 'title':
                     for elem in string.split( sumelem.value()):
+                        print "+++ title (%s)" % (sumelem.value())
                         weight = candidates.get( elem)
                         if (weight == None or weight < rank.weight()):
                             candidates[ elem] = rank.weight()
+                            print "+++ rank elem (%s, %f)" % (elem,rank.weight())
 
+        print "+++ candidate list {%s}" % (candidates)
         # Get the candidates:
         for term in terms:
             proposals_tmp = []
             cdlist = self.getDymCandidates( term, candidates)
+            print "+++ get candidates for term '%s' on '%s'" % (term,cdlist)
             for cd in cdlist:
-                for prp in proposals:
-                    proposals_tmp.append( DymItem( prp.name + " " + cd.name, cd.weight + prp.weight))
+                if proposals:
+                    for prp in proposals:
+                        proposals_tmp.append( DymItem( prp.name + " " + cd.name, cd.weight + prp.weight))
                 else:
                     proposals_tmp.append( DymItem( cd.name, cd.weight))
+            if not proposals_tmp:
+                if proposals:
+                    for prp in proposals:
+                        proposals_tmp.append( DymItem( prp.name + " " + term, 0.0 + prp.weight))
+                else:
+                    proposals_tmp.append( DymItem( term, 0.0))
             proposals,proposals_tmp = proposals_tmp,proposals
 
         # Sort the result:

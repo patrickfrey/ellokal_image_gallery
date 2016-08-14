@@ -26,13 +26,6 @@
 [Attribute]
 	docid = orig content /list/item/id();
 	title = orig content /list/item/title();
-#	insertdate = orig content /list/item/insertdate();
-#	eventdate = orig content /list/item/eventdate();
-#	width = orig content /list/item/width();
-#	length = orig content /list/item/length();
-#	fotographer = orig content /list/item/fotograph();
-#	thumbnail = orig content /list/item/thumbnail();
-#	filename = orig content /list/item/filename();
 
 [Aggregator]
 	maxpos_title = maxpos( tist);

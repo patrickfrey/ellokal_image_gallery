@@ -86,22 +86,22 @@ application = tornado.web.Application([
 # [4] Server main:
 if __name__ == "__main__":
     try:
+        storage_config_search = "path=data/storage"
+        storage_config_dym = "path=data/storage_dym"
+
         # Parse arguments:
         usage = "usage: %prog [options]"
         parser = optparse.OptionParser( usage=usage)
-        parser.add_option("-s", "--storage", dest="config", default="path=data/storage",
-                          help="Specify the storage configuration as CONFIG (default %s)" % "path=data/storage",
-                          metavar="CONFIG")
         parser.add_option("-p", "--port", dest="port", default=80,
                           help="Specify the port of this server as PORT (default %u)" % 80,
                           metavar="PORT")
 
         (options, args) = parser.parse_args()
-        storage = ellokalStorage.Storage( options.config)
+        storage = ellokalStorage.Storage( storage_config_search, storage_config_dym)
         myport = int(options.port)
 
         # Start server:
-        print( "Starting server on port %u with config %s... " % (myport,options.config) )
+        print( "Starting server on port %u" % (myport) )
         application.listen( myport )
         print( "Listening on port %u" % myport )
         ioloop = tornado.ioloop.IOLoop.current()

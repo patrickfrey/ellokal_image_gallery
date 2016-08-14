@@ -1,0 +1,14 @@
+[Document]
+	doc = /list/item;
+
+[SearchIndex]
+	ngram_title = ngram(WithStart,3):lc word /list/item/title();
+
+[ForwardIndex]
+	orig = orig split /list/item/title();
+
+[Attribute]
+	title = orig content /list/item/title();
+	docid = orig content /list/item/id();
+
+
