@@ -52,7 +52,7 @@ class Storage:
         rt.addSummarizer( "attribute", { "name": "title" })
         return rt
 
-# Constructor. Initializes the query evaluation schemes and the query and document analyzers:
+    # Constructor. Initializes the query evaluation schemes and the query and document analyzers:
     def __init__(self, config_search, config_dym):
         # Open local storage on file with configuration specified:
         self.context = strus.Context()

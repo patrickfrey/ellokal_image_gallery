@@ -10,8 +10,6 @@
 	word_de = convdia(de):stem(de):lc  word  /list/item/meta();
 	word_de = convdia(de):stem(de):lc  word  /list/item/description_de();
 
-	ngram_title = ngram(WithStart,3):lc word /list/item/title();
-
 [ForwardIndex]
 	orig = orig split /list/item/title();
 	orig = orig split /list/item/meta();
