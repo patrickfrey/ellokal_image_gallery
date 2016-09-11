@@ -7,7 +7,8 @@ import string
 import inspect
 
 # Structure data types:
-DymItem = collections.namedtuple('DymItem', ["name","weight"])
+DymItem = collections.namedtuple('DymItem', ["phrase","weight"])
+ItemOccupation = collections.namedtuple('ItemOccupation', ["list","weight"])
 
 class Storage:
     # Create a query evaluation scheme for search:
@@ -56,8 +57,8 @@ class Storage:
     def __init__(self, config_search, config_dym):
         # Open local storage on file with configuration specified:
         self.context = strus.Context()
-	self.storage_search = self.context.createStorageClient( config_search )
-	self.storage_dym = self.context.createStorageClient( config_dym )
+        self.storage_search = self.context.createStorageClient( config_search )
+        self.storage_dym = self.context.createStorageClient( config_dym )
         self.queryeval_search = self.createQueryEval_search()         # search = document search
         self.queryeval_dym = self.createQueryEval_dym()               # dym = did you mean ... ?
         self.analyzer = self.context.createQueryAnalyzer()
@@ -72,6 +73,10 @@ class Storage:
         self.analyzer.definePhraseType(
                     "dym", "ngram_title", "word", 
                     ["lc", [ "ngram", "WithStart", 3]]
+        )
+        self.analyzer.definePhraseType(
+                    "word", "word_title", "word", 
+                    ["lc", [ "convdia", "en"]]
         )
 
     # Query for retrieval of documents:
@@ -110,12 +115,14 @@ class Storage:
 
     @staticmethod
     def getCardinality( featlen):
+        if (featlen >= 4):
+            return 3
         if (featlen >= 2):
             return 2
         return 1
 
     @staticmethod
-    def hasPrefixMinEditDist_( s1, p1, s2, p2, dist):
+    def prefixEditDist_( s1, p1, s2, p2, dist):
         l1 = len(s1)
         l2 = len(s2)
 
@@ -125,100 +132,147 @@ class Storage:
                 p2 += 1
                 pass
             elif dist == 0:
-                return False
-            # Case 1 - Replace one character in string s1 with one from s2:
-            elif Storage.hasPrefixMinEditDist_( s1, p1+1, s2, p2+1, dist-1):
-                return True
-            # Case 2 - Remove one character from string s1:
-            elif Storage.hasPrefixMinEditDist_( s1, p1+1, s2, p2, dist-1):
-                return True
-            # Case 3 - Remove one character from string s2:
-            elif Storage.hasPrefixMinEditDist_( s1, p1, s2, p2+1, dist-1):
-                return True
+                return -1
             else:
-                return False
-        return (p1==p2 or p2==l2) and p1==l1
+                # Case 1 - Replace one character in string s1 with one from s2:
+                rt = Storage.prefixEditDist_( s1, p1+1, s2, p2+1, dist-1)
+                if (rt >= 0):
+                    return rt + 1
+                # Case 2 - Remove one character from string s1:
+                rt = Storage.prefixEditDist_( s1, p1+1, s2, p2, dist-1)
+                if (rt >= 0):
+                    return rt + 1
+                # Case 3 - Remove one character from string s2:
+                rt = Storage.prefixEditDist_( s1, p1, s2, p2+1, dist-1)
+                if (rt >= 0):
+                    return rt + 1
+                return -1
+        if (p1==p2 or p2==l2) and p1==l1:
+            return 0
+        else:
+            return -1
 
     @staticmethod
-    def hasPrefixMinEditDist( s1, s2, dist):
-        return Storage.hasPrefixMinEditDist_( s1, 0, s2, 0, dist)
+    def prefixEditDist( s1, s2):
+        dist = 2
+        if len( s1) < 4:
+            dist = 1
+        if len( s1) < 3:
+            dist = 0
+        return Storage.prefixEditDist_( s1, 0, s2, 0, dist)
 
     @staticmethod
-    def getDymCandidates( term, candidates):
-        rt = []
-        for cd in candidates:
-            card = 2
-            if len( term) < 5:
-                card = 1
-            if len( term) < 3:
-                card = 0
-            if Storage.hasPrefixMinEditDist( term, cd, card):
-                rt.append( DymItem( cd, candidates[ cd]))
+    def getBestElemOccuppation( terms, elems):
+        if not terms:
+            return []
+        occupation = [ ItemOccupation( [], 0.0)]
+        for termidx,term in enumerate(terms):
+            tmp_occupation = []
+            for elemidx,elem in enumerate( elems):
+                dist = Storage.prefixEditDist( term, elem)
+                if dist < 0:
+                    continue
+                for oc in occupation:
+                    if not elemidx in oc.list:
+                        tmp_occupation.append( ItemOccupation( oc.list + [elemidx], oc.weight + 1.0/(dist+1) ))
+            occupation = tmp_occupation
+            if not occupation:
+                return None
+        maxorderdist = 5
+        rt = None
+        for oc in occupation:
+            orderdist = 0
+            li = 1
+            while li < len(oc.list):
+                if oc.list[li] < oc.list[li-1]:
+                    oc.list[li-1],oc.list[li] = oc.list[li],oc.list[li-1]
+                    orderdist += 1
+                    if orderdist > maxorderdist:
+                        return None
+                    if li > 1:
+                        li -= 1
+                else:
+                    li += 1
+            if oc.list:
+                orderdist += oc.list[0] + oc.list[-1] - len(oc.list) + 1
+            weight = (0.75 * oc.weight) + (0.25 * oc.weight / (orderdist+3))
+            if not rt or rt.weight < weight:
+                rt = ItemOccupation( oc.list, weight)
         return rt
 
     # Query for retrieval of 'did you mean' proposals:
     def evaluateQuery_dym( self, querystr, nofranks):
-        terms = querystr.split()
+        # Analyze query:
         ngrams = self.analyzer.analyzePhrase( "dym", querystr)
-        if len( terms) == 0 or len(ngrams) == 0:
+        words  = self.analyzer.analyzePhrase( "word", querystr)
+        if not words or not ngrams:
             # Return empty result for empty query:
             return []
+        terms = querystr.split()
         queryeval = self.queryeval_dym
         query = queryeval.createQuery( self.storage_dym)
 
+        selexprlist = []
+
         selexpr = ["contains", 0, 0]
         position = 0
+        prev_first = None
+        this_first = None
         for term in ngrams:
             if (term.position() != position):
+                prev_first,this_first = this_first,term
                 if (position != 0):
                     selexpr[2] = self.getCardinality( len(selexpr)-3)
-                    query.defineFeature( "selfeat", selexpr, 1.0 )
+                    selexprlist.append( selexpr)
                     selexpr = ["contains", 0, 0]
+                    query.defineFeature( "docfeat", ["sequence", 1, [prev_first.type(), prev_first.value()], [term.type(), term.value()]], 1.5)
                 position = term.position()
+                if prev_first:
+                    for term in words:
+                        if (term.position() == prev_first.position()):
+                            query.defineFeature( "docfeat", ["sequence", 1, [term.type(), term.value()], [this_first.type(), this_first.value()]], 2.5)
             selexpr.append( [term.type(), term.value()] )
             query.defineFeature( "docfeat", [term.type(), term.value()], 1.0)
 
-        selexpr[2] = self.getCardinality( len(selexpr)-3)
-        query.defineFeature( "selfeat", selexpr, 1.0 )
-        query.setMaxNofRanks( nofranks)
+            selexpr[2] = self.getCardinality( len(selexpr)-3)
+            selexprlist.append( selexpr)
 
-        # Evaluate the query:
-        candidates = {}
-        result = query.evaluate()
-        proposals = []
-        for rank in result.ranks():
-            for sumelem in rank.summaryElements():
-                if sumelem.name() == 'title':
-                    for elem in string.split( sumelem.value()):
-                        weight = candidates.get( elem)
-                        if (weight == None or weight < rank.weight()):
-                            candidates[ elem] = rank.weight()
+            for term in words:
+                prev_first,this_first = this_first,term
+                query.defineFeature( "docfeat", [term.type(), term.value()], 3.0)
 
-        # Get the candidates:
-        for term in terms:
-            proposals_tmp = []
-            cdlist = self.getDymCandidates( term, candidates)
-            for cd in cdlist:
-                if proposals:
-                    for prp in proposals:
-                        proposals_tmp.append( DymItem( prp.name + " " + cd.name, cd.weight + prp.weight))
-                else:
-                    proposals_tmp.append( DymItem( cd.name, cd.weight))
-            if not proposals_tmp:
-                if proposals:
-                    for prp in proposals:
-                        proposals_tmp.append( DymItem( prp.name + " " + term, 0.0 + prp.weight))
-                else:
-                    proposals_tmp.append( DymItem( term, 0.0))
-            proposals,proposals_tmp = proposals_tmp,proposals
+            query.defineFeature( "selfeat", ["union"] + selexprlist, 1.0 )
 
-        # Sort the result:
-        proposals.sort( key=lambda b: b.weight, reverse=True)
-        rt = []
-        nofresults = len(proposals)
-        if nofresults > 20:
-            nofresults = 20
-        for proposal in proposals[ :nofresults]:
-            rt.append( proposal.name)
-        return rt
+            query.setMaxNofRanks( nofranks)
+
+            # Evaluate the query:
+            result = query.evaluate()
+            dymitems = []
+
+            for rank in result.ranks():
+                for sumelem in rank.summaryElements():
+                    if sumelem.name() == 'title':
+                        sumweight = 0.0
+                        weight = rank.weight()
+                        occupied = []
+                        elems = sumelem.value().split()
+                        occupation = Storage.getBestElemOccuppation( terms, elems)
+                        if occupation is None:
+                            continue
+                        dymitems.append( DymItem( sumelem.value(), occupation.weight * rank.weight()))
+
+            dymitems.sort( key=lambda b: b.weight, reverse=True)
+            weight = None
+            for dymidx,dymitem in enumerate(dymitems):
+               if weight is None:
+                   weight = dymitem.weight
+               elif (weight > dymitem.weight + dymitem.weight / 2):
+                   dymitems = dymitems[ :dymidx]
+                   break
+
+            # Get the results:
+            rt = []
+            for dymitem in dymitems:
+                rt.append( dymitem.phrase)
+            return rt
 

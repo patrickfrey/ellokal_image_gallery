@@ -3,6 +3,7 @@
 
 [SearchIndex]
 	ngram_title = ngram(WithStart,3):lc word /list/item/title();
+	word_title = lc:convdia("de") word /list/item/title();
 
 [ForwardIndex]
 	orig = orig split /list/item/title();
