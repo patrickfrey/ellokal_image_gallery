@@ -4,7 +4,7 @@ import tornado.gen
 import collections
 import psycopg2
 from passlib.apps import custom_app_context as pwd_context
-import pprint
+from pprint import pprint
 import inspect
 
 class EllokalDatabase:

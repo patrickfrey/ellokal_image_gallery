@@ -1,8 +1,8 @@
-DROP TABLE Contributor;
-DROP TABLE Note;
-DROP TABLE Artist;
-DROP TABLE Band;
-DROP TABLE Concert;
-DROP TABLE ConcertBandArtistRelation;
 DROP TABLE ConcertPicture;
+DROP TABLE ConcertBandArtistRelation;
+DROP TABLE Concert;
+DROP TABLE Band;
+DROP TABLE Artist;
+DROP TABLE Note;
+DROP TABLE Contributor;
 

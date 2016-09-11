@@ -101,21 +101,23 @@
 	clear: left;
 }
 #DidYouMeanList {
+	opacity:0.90;
 	display: none;
-	background-color: #f9f9f9;
-	min-width: 160px;
-	max-width: 300px;
-	overflow: auto;
+	background: #fafafa;
+	width: 348px;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
-.dymelem:hover, .dymelem:focus {
-	background-color: #aaa;
+.dymelem a {
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+.dymelem a:hover, .dymelem a:focus {
+	background-color: #e0e0eb;
 }
 #DidYouMeanElem {
-	max-width: 300px;
-}
-#message {
-	font-style: italic;
+	background: #fafafa;
+	width: 348px;
 }
 
 

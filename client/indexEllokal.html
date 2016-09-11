@@ -89,11 +89,22 @@
 				$.each( jd.result, function( i, obj) {
 					$('#DidYouMeanList').append('<div id="DidYouMeanElem" class="dymelem" tabindex="0">' + obj + '</div>');
 				});
+				if ( jd.result.length == 0 ) {
+					$('#DidYouMeanList').hide();
+				}
 			}
 		})
 		.fail(function(jqXHR, status, error){
 			 alert( "Error (status " + status + "): " + error );
 		})
+	}
+	var delayTimer;
+	function submitDidYouMeanQuery() {
+		clearTimeout(delayTimer);
+		delayTimer = setTimeout(function() {
+			DidYouMeanQuery( $('#searchtext').val());
+			$('#DidYouMeanList').show();
+		}, 400);
 	}
 	$(function() {
 		$("#searchsubmit").click(function(jd){
@@ -131,8 +142,7 @@
 			}
 		});
 		$('#searchtext').bind('input', function() {
-			DidYouMeanQuery( $('#searchtext').val());
-			$('#DidYouMeanList').show();
+			submitDidYouMeanQuery( $('#searchtext').val());
 		});
 		window.onclick = function(event) {
 			if (event.target.matches('.dymelem')) {
