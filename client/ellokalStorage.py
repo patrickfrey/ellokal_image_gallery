@@ -22,13 +22,14 @@ class Storage:
 
         # Query evaluation scheme:
         rt.addWeightingFunction( "BM25", {
-            "k1": 1.2, "b": 0.75, "avgdoclen": 50,
+            "k1": 1.2, "b": 0.75, "avgdoclen": 10,
             "metadata_doclen": "doclen",
             ".match": "docfeat"
         })
 
-        # Summarizer for getting the document title:
+        # Summarizers:
         rt.addSummarizer( "attribute", { "name": "title" })
+        rt.addSummarizer( "attribute", { "name": "docid" })
         # Summarizer for abstracting:
         rt.addSummarizer( "matchphrase", {
             "type": "orig", "metadata_title_maxpos": "maxpos_title",
@@ -49,7 +50,7 @@ class Storage:
         rt.addWeightingFunction( "td", {
                 ".match": "docfeat"
         })
-        # Summarizer for getting the document title:
+        # Summarizers:
         rt.addSummarizer( "attribute", { "name": "title" })
         return rt
 
@@ -102,14 +103,17 @@ class Storage:
         rt = []
         for rank in result.ranks():
             title = ""
+            docid = None
             summary = ""
             for sumelem in rank.summaryElements():
                 if sumelem.name() == 'title':
                     title = sumelem.value()
+                elif sumelem.name() == 'docid':
+                    docid = sumelem.value()
                 elif sumelem.name() == 'summary':
-                        summary = sumelem.value()
+                    summary = sumelem.value()
             rt.append( {
-                   'weight':rank.weight(), 'docno':rank.docno(), 'title':title, 'summary':summary
+                   'weight':rank.weight(), 'id':docid, 'title':title, 'summary':summary
             })
         return rt
 

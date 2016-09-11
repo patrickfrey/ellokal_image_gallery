@@ -30,8 +30,8 @@ class EllokalDatabase:
         for idx,rank in enumerate(ranks):
             if (idx > 0):
                 dbquery += ','
-            dbquery += str( rank['docno'])
-            rttab[ rank['docno']] = rank
+            dbquery += str( rank['id'])
+            rttab[ int( rank['id'])] = rank
         dbquery += ");"
         self.cursor.execute( dbquery )
         dbresults = self.cursor.fetchmany( len(ranks))
@@ -55,7 +55,7 @@ class EllokalDatabase:
             rtelem['filename'] = dbres[15]
             rttab[ dbres[0]] = rtelem
         for rank in ranks:
-            rt.append( rttab[ rank['docno']])
+            rt.append( rttab[ rank['id']])
         raise tornado.gen.Return( rt )
 
 
