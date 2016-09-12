@@ -12,7 +12,7 @@
 		{
 			q: text,
 			i: startindex,
-			n: nofranks
+			n: nofranks+1
 		},
 		function(jd) {
 			if (jd.error)
@@ -28,7 +28,8 @@
 					$('#searchprev').hide();
 				}
 				$('#searchnext').hide();
-				if (nofranks == jd.result.length) {
+				if (nofranks+1 == jd.result.length) {
+					jd.result.pop();
 					$('#searchnext').show();
 				}
 				else
