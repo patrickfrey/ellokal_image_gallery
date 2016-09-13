@@ -8,6 +8,7 @@ thumbnail() {
 }
 
 processImage() {
+	VIEWIMG=`convert -resize 20% "$1" - | base64 -`
 	FILENAME=`echo "$1" | perl -pe 's@^.*/([A-F0-9_]+).jpg$@\1@' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	CONCERTDATE=`echo "$1" | grep -oP "[0-9]{4}[\.][0-9]{1,2}[\.][0-9]{1,2}" | sed 's/04\.31/04\.30/'`
 	exiftool "$1" > exiftool.out
@@ -28,6 +29,7 @@ processImage() {
 
 	echo "INSERT INTO Concert (date,title) SELECT '$CONCERTDATE', '$CONCERTNAME' WHERE NOT EXISTS (SELECT * FROM Concert WHERE date='$CONCERTDATE' AND title='$CONCERTNAME');"
 	echo "INSERT INTO ConcertPicture (concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename) SELECT id,'$BRENNWEITE','$BLENDE','$EXPTIME','$TIMSTMP','$DATETIME','$PROGRAM','$RESOLUTION_X','$RESOLUTION_Y','$WIDTH','$LENGTH','$META','$FOTOGRAPHER','$THUMBNAIL','$FILENAME' FROM Concert WHERE date='$CONCERTDATE' AND title='$CONCERTNAME';"
+	echo "INSERT INTO ConcertPictureImg (pictureId,image) SELECT id,'$VIEWIMG' FROM ConcertPicture WHERE filename='$FILENAME';"
 }
 
 rm -Rf tmp

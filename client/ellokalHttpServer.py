@@ -30,10 +30,13 @@ class QueryHandler( tornado.web.RequestHandler ):
     @tornado.gen.coroutine
     def get(self):
         try:
+            print ("DEBUG")
             session = ellokalSession.EllokalSession( self)
             db = ellokalDatabase.EllokalDatabase()
             # q = query terms:
             querystr = self.get_argument( "q", "")
+            # m = mode (0 = Thumbnails, 1 = First rank with big image):
+            mode = int( self.get_argument( "m", 0))
             # i = firstrank:
             firstrank = int( self.get_argument( "i", 0))
             # n = nofranks:
@@ -43,8 +46,9 @@ class QueryHandler( tornado.web.RequestHandler ):
             restrictset = []
             for rs in restricts:
                 restrictset.append( int(rs))
+            print "REQUEST '%s' %u %u" % (querystr, firstrank, nofranks)
             searchresult = storage.evaluateQuery_search( querystr, firstrank, nofranks, restrictset)
-            result = yield db.completePictures( searchresult)
+            result = yield db.completePictures( searchresult, mode)
             response = { 'error': None,
                          'result': result
             }

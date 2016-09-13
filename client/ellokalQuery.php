@@ -4,9 +4,14 @@ try
 	$restrictset = NULL;
 	$nofRanks = 4;
 	$minRank = 0;
+	$mode = 0;
 	$queryString = "";
 
 	parse_str( getenv('QUERY_STRING'), $_GET);
+	if (array_key_exists( 'm', $_GET))
+	{
+		$mode = intval( $_GET['m']);
+	}
 	if (array_key_exists( 'n', $_GET))
 	{
 		$nofRanks = intval( $_GET['n']);
@@ -28,6 +33,7 @@ try
 			. '?q=' . urlencode($queryString)
 			. '&i=' . urlencode($minRank)
 			. '&n=' . urlencode($nofRanks)
+			. '&m=' . urlencode($mode)
 			. '&d=' . urlencode($restrictset);
 	$response = array(
 		"error" => "server not running"

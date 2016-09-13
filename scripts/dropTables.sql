@@ -1,3 +1,4 @@
+DROP TABLE ConcertPictureImg;
 DROP TABLE ConcertPicture;
 DROP TABLE ConcertBandArtistRelation;
 DROP TABLE Concert;

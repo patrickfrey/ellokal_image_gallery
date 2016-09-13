@@ -73,4 +73,10 @@ CREATE TABLE ConcertPicture
     filename      TEXT
 );
 
+CREATE TABLE ConcertPictureImg
+(
+    pictureId    INT REFERENCES ConcertPicture(id),
+    image        TEXT
+);
+
 
