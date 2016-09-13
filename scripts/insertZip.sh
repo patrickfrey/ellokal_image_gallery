@@ -8,13 +8,23 @@ thumbnail() {
 }
 
 processImage() {
-	VIEWIMG=`convert -resize 20% "$1" - | base64 -`
 	FILENAME=`echo "$1" | perl -pe 's@^.*/([A-F0-9_]+).jpg$@\1@' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	CONCERTDATE=`echo "$1" | grep -oP "[0-9]{4}[\.][0-9]{1,2}[\.][0-9]{1,2}" | sed 's/04\.31/04\.30/'`
 	exiftool "$1" > exiftool.out
 	CONCERTNAME=`cat exiftool.out | grep '^Title\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	THUMBNAIL=`thumbnail "$1"`
 	WIDTH=`cat exiftool.out | grep '^Image Width\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
+	RESIZEIMG="30%"
+	if [ $WIDTH -gt 7000 ]; then
+		RESIZEIMG="15%";
+	elif [ $WIDTH -gt 6000 ]; then
+		RESIZEIMG="18%";
+	elif [ $WIDTH -gt 5000 ]; then
+		RESIZEIMG="22%";
+	elif [ $WIDTH -gt 4000 ]; then
+		RESIZEIMG="26%";
+	fi
+	VIEWIMG=`convert -resize $RESIZEIMG "$1" - | composite -geometry +20+20 -blend 10 ../logoellokal.png - - | base64 -`
 	LENGTH=`cat exiftool.out | grep '^Image Height\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	BRENNWEITE=`cat exiftool.out | grep '^Focal Length\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	BLENDE=`cat exiftool.out | grep '^F Number\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
