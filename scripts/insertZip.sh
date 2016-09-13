@@ -24,7 +24,7 @@ processImage() {
 	elif [ $WIDTH -gt 4000 ]; then
 		RESIZEIMG="19%";
 	fi
-	VIEWIMG=`convert -resize $RESIZEIMG "$1" - | composite -geometry +50+50 -blend 8 ../logoellokal.png - - | base64 -`
+	VIEWIMG=`convert -resize $RESIZEIMG "$1" - | composite -geometry +50+50 -blend 8 ../../scripts/logoellokal.png - - | base64 -`
 	LENGTH=`cat exiftool.out | grep '^Image Height\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	BRENNWEITE=`cat exiftool.out | grep '^Focal Length\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	BLENDE=`cat exiftool.out | grep '^F Number\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
