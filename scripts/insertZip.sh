@@ -14,15 +14,15 @@ processImage() {
 	CONCERTNAME=`cat exiftool.out | grep '^Title\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	THUMBNAIL=`thumbnail "$1"`
 	WIDTH=`cat exiftool.out | grep '^Image Width\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
-	RESIZEIMG="20%"
+	RESIZEIMG="28%"
 	if [ $WIDTH -gt 7000 ]; then
-		RESIZEIMG="15%";
+		RESIZEIMG="12%";
 	elif [ $WIDTH -gt 6000 ]; then
 		RESIZEIMG="16%";
 	elif [ $WIDTH -gt 5000 ]; then
-		RESIZEIMG="18%";
+		RESIZEIMG="20%";
 	elif [ $WIDTH -gt 4000 ]; then
-		RESIZEIMG="19%";
+		RESIZEIMG="24%";
 	fi
 	VIEWIMG=`convert -resize $RESIZEIMG "$1" - | composite -geometry +50+50 -blend 8 ../../scripts/logoellokal.png - - | base64 -`
 	LENGTH=`cat exiftool.out | grep '^Image Height\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
