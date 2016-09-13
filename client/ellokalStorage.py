@@ -5,6 +5,8 @@ import re
 import collections
 import string
 import inspect
+import re
+from pprint import pprint
 
 # Structure data types:
 DymItem = collections.namedtuple('DymItem', ["phrase","weight"])
@@ -212,6 +214,7 @@ class Storage:
         if not words or not ngrams:
             # Return empty result for empty query:
             return []
+        querystr = re.sub(r'([^a-zA-Z0-9])', " ", querystr)
         terms = querystr.split()
         queryeval = self.queryeval_dym
         query = queryeval.createQuery( self.storage_dym)
@@ -259,7 +262,8 @@ class Storage:
                         sumweight = 0.0
                         weight = rank.weight()
                         occupied = []
-                        elems = sumelem.value().split()
+                        title = re.sub(r'([^a-zA-Z0-9])', " ", sumelem.value())
+                        elems = title.split()
                         occupation = Storage.getBestElemOccuppation( terms, elems)
                         if occupation is None:
                             continue
