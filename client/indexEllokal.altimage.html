@@ -12,6 +12,8 @@
 		if (jd.error)
 		{
 			alert( "Error: " + jd.error );
+			$('#completeimg').hide();
+			$('#ranklist').hide();
 		}
 		else if (0 < jd.result.length)
 		{
@@ -30,21 +32,31 @@
 			{
 				$('#searchnext').hide();
 			}
-			var ranklist = "";
 			if (mode == 0) {
+				var ranklist = "";
 				$.each( jd.result, function( i, obj) {
 					ranklist += '<div id="rank"><div id="thumbnail"><img alt="Thumbnail" src="data:image/png;base64,' + obj.thumbnail + '"/></div><div id="prop"><ul><li><div id="title">' + obj.title + '</div></li><li><div id="id">' + obj.filename + '</div></li><li><div id="date">' + obj.eventdate + '</div></li><li><div id="dimension">' + obj.width + ' x ' + obj.length + "</div></li></ul>\n</div>\n</div>\n</div>\n";
 				});
+				$('#ranklist').html( ranklist);
+				$('#completeimg').hide();
+				$('#ranklist').show();
+				
 			}
 			else if (mode == 1)
 			{
 				obj = jd.result[0];
-				ranklist = '<div id="imgprop"><div id="imgtitle">' + obj.title + '</div><div id="imgid">' + obj.filename + '</div><div id="imgdate">' + obj.eventdate + '</div><div id="imgdimension">' + obj.width + ' x ' + obj.length + "</div></div>\n" + '<div id="rank"><div id="bigimage"><img alt="Thumbnail" src="data:image/png;base64,' + obj.image + '"/></div>' + "</div>\n</div>\n";
+				document.getElementById("image").src = "data:image/png;base64,'" + obj.image + "'";
+				document.getElementById("imgtitle").value = obj.title;
+				document.getElementById("imgid").value = obj.filename;
+				document.getElementById("imgdate").value = obj.eventdate;
+				document.getElementById("imgdimension").value = obj.width + ' x ' + obj.length;
+				$('#ranklist').hide();
+				$('#completeimg').show();
 			}
-			$('#ranklist').html( ranklist);
 		}
 		else
 		{
+			$('#completeimg').hide();
 			$('#searchnext').hide();
 			if (startindex == 0)
 			{
@@ -212,6 +224,15 @@
 </div>
 <div id="searchresult">
 	<div id="ranklist"></div>
+</div>
+<div id="completeimg">
+	<div id="imgprop">
+		<div id="imgtitle"></div>
+		<div id="imgid"></div>
+		<div id="imgdate"></div>
+		<div id="imgdimension"></div>
+	</div>
+	<div id="imageframe"><img id="image" alt="CompleteImage" src=""/></div>
 </div>
 </div>
 </body>

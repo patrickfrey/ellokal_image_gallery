@@ -6,10 +6,12 @@ thumbnail() {
 	rm -f "$1.thumbnail.jpg"
 	echo $RES
 }
+PICTURECNT=0
 
 processImage() {
 	FILENAME=`echo "$1" | perl -pe 's@^.*/([A-F0-9_]+).jpg$@\1@' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	CONCERTDATE=`echo "$1" | grep -oP "[0-9]{4}[\.][0-9]{1,2}[\.][0-9]{1,2}" | sed 's/04\.31/04\.30/'`
+	PICTURECNT=$(expr $PICTURECNT + 1)
 	exiftool "$1" > exiftool.out
 	CONCERTNAME=`cat exiftool.out | grep '^Title\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	THUMBNAIL=`thumbnail "$1"`
@@ -56,7 +58,7 @@ else
 fi
 unzip *.zip
 rm -Rf __MACOSX
-find "./" -name "*.jpg" > input.lst
+find "./" -name "*.jpg" | sort > input.lst
 
 while read filename <&3; do
 	processImage "$filename"

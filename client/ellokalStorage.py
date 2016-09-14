@@ -28,6 +28,8 @@ class Storage:
             "metadata_doclen": "doclen",
             ".match": "docfeat"
         })
+        rt.addWeightingFunction( "metadata", { "name":"pictureno" });
+        rt.addWeightingFormula( "(_0 * 100000) + (sqrt(_1) / 100)", {} );
 
         # Summarizers:
         rt.addSummarizer( "attribute", { "name": "title" })

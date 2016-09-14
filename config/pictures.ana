@@ -17,9 +17,8 @@
 	orig = orig split /list/item/description_de();
 
 [MetaData]
-	insertdate = date2int("d 1877-01-01", "%Y-%m-%d %H:%M:%s *") content /list/item/insertdate();
-	eventdate = date2int("d 1877-01-01", "%Y-%m-%d %H:%M:%s *") content /list/item/eventdate();
 	concertid = orig word /list/item/concertId();
+	pictureno = orig word /list/item/id();
 
 [Attribute]
 	docid = orig content /list/item/id();

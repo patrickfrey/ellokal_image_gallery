@@ -17,9 +17,6 @@
 }
 
 #ranklist {
-	position:   absolute;
-	top:        80px;
-	left:       10px;
 	padding:    15px;
 	font-size:  16px;
 	display:    table;
@@ -38,13 +35,18 @@
 	height:   120px;
 	overflow: hidden;
 }
-#bigimage {
+#completeimg {
+	display:  none;
+}
+#imageframe {
 	float:    left;
 	display:  table-column;
 	position: relative;
 	width:    100%;
 	height:   100%;
 	overflow: hidden;
+}
+#imgprop {
 }
 #imgid,#imgtitle,#imgdate,#imgdimension {
 	float:      left;
