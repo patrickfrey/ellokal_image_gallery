@@ -30,8 +30,10 @@
 			{
 				$('#searchnext').hide();
 			}
+			$('#ranklist').hide();
 			var ranklist = "";
 			if (mode == 0) {
+				var ranklist = "";
 				$.each( jd.result, function( i, obj) {
 					ranklist += '<div id="rank"><div id="thumbnail"><img alt="Thumbnail" src="data:image/png;base64,' + obj.thumbnail + '"/></div><div id="prop"><ul><li><div id="title">' + obj.title + '</div></li><li><div id="id">' + obj.filename + '</div></li><li><div id="date">' + obj.eventdate + '</div></li><li><div id="dimension">' + obj.width + ' x ' + obj.length + "</div></li></ul>\n</div>\n</div>\n</div>\n";
 				});
@@ -42,6 +44,9 @@
 				ranklist = '<div id="imgprop"><div id="imgtitle">' + obj.title + '</div><div id="imgid">' + obj.filename + '</div><div id="imgdate">' + obj.eventdate + '</div><div id="imgdimension">' + obj.width + ' x ' + obj.length + "</div></div>\n" + '<div id="rank"><div id="bigimage"><img alt="Thumbnail" src="data:image/png;base64,' + obj.image + '"/></div>' + "</div>\n</div>\n";
 			}
 			$('#ranklist').html( ranklist);
+			$('#ranklist').ready( function() {
+				$('#ranklist').show();
+			});
 		}
 		else
 		{
@@ -110,7 +115,7 @@
 	var delayTimer;
 	function submitDidYouMeanQuery() {
 		clearTimeout(delayTimer);
-		delayTimer = setTimeout(function() {
+		delayTimer = setTimeout( function() {
 			DidYouMeanQuery( $('#searchtext').val());
 			$('#DidYouMeanList').show();
 		}, 400);
