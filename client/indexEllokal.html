@@ -153,11 +153,13 @@
 			if (searchmode == 0) {
 				searchmode = 1;
 				nof = 1;
+				document.getElementById('fullscreen').id = 'exitfullscreen';
 			}
 			else
 			{
 				searchmode = 0;
 				nof = 4;
+				document.getElementById('exitfullscreen').id = 'fullscreen';
 			}
 			document.getElementById("searchmode").value = searchmode;
 			document.getElementById("nofranks").value = nof;
@@ -186,7 +188,7 @@
 		$('#searchtext').bind('input', function() {
 			submitDidYouMeanQuery( $('#searchtext').val());
 		});
-		window.onclick = function(event) {
+		document.addEventListener( 'touchend', function(event) {
 			if (event.target.matches('.dymelem')) {
 				var nof = parseInt( $('#nofranks').val());
 				var searchmode = parseInt( $('#searchmode').val());
@@ -196,7 +198,18 @@
 			else {
 				$('#DidYouMeanList').hide();
 			}
-		}
+		});
+		document.addEventListener( 'click', function(event) {
+			if (event.target.matches('.dymelem')) {
+				var nof = parseInt( $('#nofranks').val());
+				var searchmode = parseInt( $('#searchmode').val());
+				$('#DidYouMeanList').hide();
+				SearchQuery( $(event.target).text(), 0, nof, searchmode);
+			}
+			else {
+				$('#DidYouMeanList').hide();
+			}
+		});
 	});
 </script>
 </head>
@@ -208,6 +221,7 @@
 	<input type = "button" id = "searchnext" tabindex="-1"/>
 	<input type = "button" id = "searchprev" tabindex="-1"/>
 	<input type = "button" id = "fullscreen" tabindex="0"/>
+	<input type = "button" id = "concertlist" tabindex="0"/>
 	<input type = "hidden" id = "searchmode" value="0" tabindex="-1"/>
 	<input type = "hidden" id = "startindex" value="0" tabindex="-1"/>
 	<input type = "hidden" id = "nofranks" value="4" tabindex="-1"/>

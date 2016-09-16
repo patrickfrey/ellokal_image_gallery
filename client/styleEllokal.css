@@ -17,6 +17,7 @@
 }
 
 #ranklist {
+	z-index:    1;
 	position:   absolute;
 	top:        80px;
 	left:       10px;
@@ -90,7 +91,7 @@
 	border-radius: 4px;
 	font-size: 16px;
 	background-color: white;
-	background-image: url('./searchicon.png');
+	background-image: url('./search-icon.png');
 	background-position: 10px 10px; 
 	background-size: 25px 25px;
 	background-repeat: no-repeat;
@@ -113,7 +114,15 @@
 	background-image: url('./fullscreen-icon.png');
 	display: default;
 }
-#searchsubmit,#searchprev,#searchnext,#fullscreen {
+#exitfullscreen {
+	background-image: url('./exit-fullscreen-icon.png');
+	display: default;
+}
+#concertlist {
+	background-image: url('./concertlist-icon.png');
+	display: default;
+}
+#searchsubmit,#searchprev,#searchnext,#fullscreen,#exitfullscreen,#concertlist {
 	float: left;
 	box-sizing: border-box;
 	border: 2px solid #ccc;
@@ -130,27 +139,30 @@
 	clear: left;
 }
 #DidYouMean {
-	clear: left;
+	z-index:    2;
+	clear:      left;
 }
 #DidYouMeanList {
-	opacity:0.90;
-	display: none;
+	position:   relative;
+	z-index:    2;
+	display:    none;
 	background: #fafafa;
-	width: 348px;
+	width:      348px;
 	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
-.dymelem a {
-	color: black;
+.dymelem {
+	color:           black;
 	text-decoration: none;
-	display: block;
-}
-.dymelem a:hover, .dymelem a:focus {
-	background-color: #e0e0eb;
+	display:         block;
 }
 #DidYouMeanElem {
+	z-index:    2;
+	display:    block;
 	background: #fafafa;
-	width: 348px;
+	width:      348px;
 }
+
+
 
 
 

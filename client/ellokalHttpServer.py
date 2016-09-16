@@ -45,8 +45,10 @@ class QueryHandler( tornado.web.RequestHandler ):
             restrictset = []
             for rs in restricts:
                 restrictset.append( int(rs))
+            # l = lang:
+            lang = self.get_argument( "l", "de")
             searchresult = storage.evaluateQuery_search( querystr, firstrank, nofranks, restrictset)
-            result = yield db.completePictures( searchresult, mode)
+            result = yield db.completePictures( searchresult, mode, lang)
             response = { 'error': None,
                          'result': result
             }
@@ -67,6 +69,27 @@ class DymHandler( tornado.web.RequestHandler ):
             nofranks = int( self.get_argument( "n", 6))
             response = { 'error': None,
                          'result': storage.evaluateQuery_dym( querystr, nofranks)
+            }
+            self.write(response)
+        except Exception as e:
+            response = { 'error': str(e) }
+            self.write(response)
+
+class ConcertListHandler( tornado.web.RequestHandler ):
+    @tornado.gen.coroutine
+    def get(self):
+        try:
+            session = ellokalSession.EllokalSession( self)
+            db = ellokalDatabase.EllokalDatabase()
+            # i = firstrank:
+            firstrank = int( self.get_argument( "i", 0))
+            # n = nofranks:
+            nofranks = int( self.get_argument( "n", 4))
+            # l = lang:
+            lang = self.get_argument( "l", "de")
+            result = yield db.concertList( firstrank, nofranks, lang)
+            response = { 'error': None,
+                         'result': result
             }
             self.write(response)
         except Exception as e:

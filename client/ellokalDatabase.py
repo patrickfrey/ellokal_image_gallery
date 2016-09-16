@@ -7,6 +7,8 @@ from passlib.apps import custom_app_context as pwd_context
 from pprint import pprint
 import inspect
 
+ConcertItem = collections.namedtuple('ConcertItem', ["id","date","title","description"])
+
 class EllokalDatabase:
     def __init__( self):
         self.conn = psycopg2.connect( host="localhost", dbname="ellokaldb", user="ellokal", password="1w5b5ufh")
@@ -21,11 +23,16 @@ class EllokalDatabase:
 
     # QUERY:
     @tornado.gen.coroutine
-    def completePictures( self, ranks, mode):
+    def completePictures( self, ranks, mode, lang):
         rt = []
         if not ranks:
             raise tornado.gen.Return( rt);
-        dbquery = 'SELECT id,concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename FROM ConcertPicture WHERE id IN ('
+        dbquery = 'SELECT id,concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename,'
+        if (lang == 'de'):
+            dbquery += 'description_de'
+        else:
+            dbquery += 'description_en'
+        dbquery += ' FROM ConcertPicture WHERE id IN ('
         rttab = {}
         for idx,rank in enumerate(ranks):
             if (idx > 0):
@@ -61,6 +68,17 @@ class EllokalDatabase:
             self.cursor.execute( dbquery )
             (image,) = self.cursor.fetchone()
             rt[0]['image'] = image
+        raise tornado.gen.Return( rt )
+
+    # QUERY:
+    @tornado.gen.coroutine
+    def concertList( self, first, nof, lang):
+        rt = []
+        dbquery = 'SELECT id,date,title,description_en FROM Concert WHERE id >= %u AND id < %u' % (first, first + nof)
+        yield self.cursor.execute( dbquery )
+        dbresults = self.cursor.fetchmany( nof)
+        for dbres in dbresults:
+            rt.append( ConcertItem( dbres[0], dbres[1], dbres[2], dbres[3] ))
         raise tornado.gen.Return( rt )
 
 
