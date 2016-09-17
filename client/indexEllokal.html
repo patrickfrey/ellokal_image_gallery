@@ -172,14 +172,13 @@
 			SearchQuery( g_query, g_startindex, g_nofranks, g_searchmode);
 		});
 		$("#concertlist").click(function(jd) {
-			if (g_searchmode == 0) {
+			if (g_searchmode != 2) {
 				g_searchmode = 2;
 				g_nofranks = 20;
 				document.getElementById('concertlist').id = 'exitconcertlist';
 			}
 			else
 			{
-				alert( "QUERY: " + g_query );
 				g_searchmode = 0;
 				g_nofranks = 4;
 				document.getElementById('exitconcertlist').id = 'concertlist';
