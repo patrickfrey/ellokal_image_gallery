@@ -40,6 +40,8 @@ class QueryHandler( tornado.web.RequestHandler ):
             firstrank = int( self.get_argument( "i", 0))
             # n = nofranks:
             nofranks = int( self.get_argument( "n", 4))
+            # s = size:
+            size = int( self.get_argument( "s", 100))
             # d = document number to restrict to:
             restricts = self.get_argument( "d", "").split()
             restrictset = []
@@ -48,7 +50,7 @@ class QueryHandler( tornado.web.RequestHandler ):
             # l = lang:
             lang = self.get_argument( "l", "de")
             searchresult = storage.evaluateQuery_search( querystr, firstrank, nofranks, restrictset)
-            result = yield db.completePictures( searchresult, mode, lang)
+            result = yield db.completePictures( searchresult, mode, size, lang)
             response = { 'error': None,
                          'result': result
             }

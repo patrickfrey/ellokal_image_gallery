@@ -76,6 +76,7 @@ CREATE TABLE ConcertPicture
 CREATE TABLE ConcertPictureImg
 (
     pictureId    INT REFERENCES ConcertPicture(id),
+    size         INT,
     image        TEXT
 );
 

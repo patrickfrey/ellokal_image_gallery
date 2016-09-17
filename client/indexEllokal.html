@@ -12,6 +12,11 @@
 	var g_startindex=0;
 	var g_nofranks=4;
 	var g_query="";
+	var g_size=100;
+
+	if (screen.width < 480)		{ g_size = 30; }
+	else if (screen.width < 640)	{ g_size = 45; }
+	else if (screen.width < 960)	{ g_size = 60; }
 
 	function DisplayRanklist( jd, startindex, nofranks, mode) {
 		if (jd.error)
@@ -89,7 +94,8 @@
 			q: text,
 			i: startindex,
 			n: nofranks+1,
-			m: searchmode
+			m: searchmode,
+			s: g_size
 		},
 		function(jd) {
 			DisplayRanklist( jd, startindex, nofranks, searchmode) 

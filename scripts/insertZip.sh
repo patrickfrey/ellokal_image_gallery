@@ -16,17 +16,35 @@ processImage() {
 	CONCERTNAME=`cat exiftool.out | grep '^Title\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	THUMBNAIL=`thumbnail "$1"`
 	WIDTH=`cat exiftool.out | grep '^Image Width\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
-	RESIZEIMG="28%"
+	RESIZEIMG_100="28%"
+	RESIZEIMG_60="17%"
+	RESIZEIMG_45="13%"
+	RESIZEIMG_30="8%"
 	if [ $WIDTH -gt 7000 ]; then
-		RESIZEIMG="12%";
+		RESIZEIMG_100="12%";
+		RESIZEIMG_60="7%"
+		RESIZEIMG_45="5%"
+		RESIZEIMG_30="4%"
 	elif [ $WIDTH -gt 6000 ]; then
-		RESIZEIMG="16%";
+		RESIZEIMG_100="16%";
+		RESIZEIMG_60="10%"
+		RESIZEIMG_45="7%"
+		RESIZEIMG_30="5%"
 	elif [ $WIDTH -gt 5000 ]; then
-		RESIZEIMG="20%";
+		RESIZEIMG_100="20%";
+		RESIZEIMG_60="12%"
+		RESIZEIMG_45="9%"
+		RESIZEIMG_30="6%"
 	elif [ $WIDTH -gt 4000 ]; then
-		RESIZEIMG="24%";
+		RESIZEIMG_100="24%";
+		RESIZEIMG_60="14%"
+		RESIZEIMG_45="11%"
+		RESIZEIMG_30="7%"
 	fi
-	VIEWIMG=`convert -resize $RESIZEIMG "$1" - | composite -geometry +20+20 -blend 12 ../../scripts/logoellokal_20p.png - - | base64 -`
+	VIEWIMG_100=`convert -resize $RESIZEIMG_100 "$1" - | composite -geometry +20+20 -blend 15 ../../scripts/logoellokal_20p.png - - | base64 -`
+	VIEWIMG_60=`convert -resize $RESIZEIMG_60 "$1" - | composite -geometry +20+20 -blend 12 ../../scripts/logoellokal_12p.png - - | base64 -`
+	VIEWIMG_45=`convert -resize $RESIZEIMG_45 "$1" - | composite -geometry +20+20 -blend 12 ../../scripts/logoellokal_9p.png - - | base64 -`
+	VIEWIMG_30=`convert -resize $RESIZEIMG_30 "$1" - | composite -geometry +20+20 -blend 12 ../../scripts/logoellokal_6p.png - - | base64 -`
 	LENGTH=`cat exiftool.out | grep '^Image Height\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	BRENNWEITE=`cat exiftool.out | grep '^Focal Length\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
 	BLENDE=`cat exiftool.out | grep '^F Number\s*[:]' | head -n 1 | awk '{sub(/:/,"~")}1' | awk -F'~' '{print $2}' | sed 's/^ //' | perl -pe "s@\'([\S])@\'\'\1@g"`
@@ -41,7 +59,10 @@ processImage() {
 
 	echo "INSERT INTO Concert (date,title) SELECT '$CONCERTDATE', '$CONCERTNAME' WHERE NOT EXISTS (SELECT * FROM Concert WHERE date='$CONCERTDATE' AND title='$CONCERTNAME');"
 	echo "INSERT INTO ConcertPicture (concertId,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename) SELECT id,'$BRENNWEITE','$BLENDE','$EXPTIME','$TIMSTMP','$DATETIME','$PROGRAM','$RESOLUTION_X','$RESOLUTION_Y','$WIDTH','$LENGTH','$META','$FOTOGRAPHER','$THUMBNAIL','$FILENAME' FROM Concert WHERE date='$CONCERTDATE' AND title='$CONCERTNAME';"
-	echo "INSERT INTO ConcertPictureImg (pictureId,image) SELECT id,'$VIEWIMG' FROM ConcertPicture WHERE filename='$FILENAME';"
+	echo "INSERT INTO ConcertPictureImg (pictureId,size,image) SELECT id,'100','$VIEWIMG_100' FROM ConcertPicture WHERE filename='$FILENAME';"
+	echo "INSERT INTO ConcertPictureImg (pictureId,size,image) SELECT id,'60','$VIEWIMG_60' FROM ConcertPicture WHERE filename='$FILENAME';"
+	echo "INSERT INTO ConcertPictureImg (pictureId,size,image) SELECT id,'45','$VIEWIMG_45' FROM ConcertPicture WHERE filename='$FILENAME';"
+	echo "INSERT INTO ConcertPictureImg (pictureId,size,image) SELECT id,'30','$VIEWIMG_30' FROM ConcertPicture WHERE filename='$FILENAME';"
 }
 
 rm -Rf tmp

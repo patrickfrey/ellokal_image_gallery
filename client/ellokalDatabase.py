@@ -21,7 +21,7 @@ class EllokalDatabase:
 
     # QUERY:
     @tornado.gen.coroutine
-    def completePictures( self, ranks, mode, lang):
+    def completePictures( self, ranks, mode, picsize, lang):
         rt = []
         if not ranks:
             raise tornado.gen.Return( rt);
@@ -62,7 +62,7 @@ class EllokalDatabase:
         for rank in ranks:
             rt.append( rttab[ rank['id']])
         if rt and mode == 1:
-            dbquery = "SELECT image FROM ConcertPictureImg WHERE pictureId = '%s'" % (rt[0]['id'])
+            dbquery = "SELECT image FROM ConcertPictureImg WHERE pictureId = '%s' AND size='%s'" % (rt[0]['id'], picsize)
             self.cursor.execute( dbquery )
             (image,) = self.cursor.fetchone()
             rt[0]['image'] = image
