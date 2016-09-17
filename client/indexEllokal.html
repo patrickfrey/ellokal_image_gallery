@@ -162,7 +162,13 @@
 			SearchQuery( $('#searchtext').val(), idx, g_nofranks, g_searchmode);
 		});
 		$("#fullscreen").click(function(jd) {
-			if (g_searchmode == 0) {
+			if (g_searchmode == 2) {
+				g_searchmode = 1;
+				g_nofranks = 1;
+				document.getElementById('exitconcertlist').id = 'concertlist';
+				document.getElementById('fullscreen').id = 'exitfullscreen';
+			}
+			else if (g_searchmode == 0) {
 				g_searchmode = 1;
 				g_nofranks = 1;
 				document.getElementById('fullscreen').id = 'exitfullscreen';
@@ -178,7 +184,13 @@
 			SearchQuery( g_query, g_startindex, g_nofranks, g_searchmode);
 		});
 		$("#concertlist").click(function(jd) {
-			if (g_searchmode != 2) {
+			if (g_searchmode == 1) {
+				g_searchmode = 2;
+				g_nofranks = 20;
+				document.getElementById('concertlist').id = 'exitconcertlist';
+				document.getElementById('exitfullscreen').id = 'fullscreen';
+			}
+			else if (g_searchmode == 0) {
 				g_searchmode = 2;
 				g_nofranks = 20;
 				document.getElementById('concertlist').id = 'exitconcertlist';
