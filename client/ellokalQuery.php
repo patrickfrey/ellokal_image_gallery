@@ -5,7 +5,8 @@ try
 	$nofRanks = 4;
 	$minRank = 0;
 	$mode = 0;
-	$queryString = "";
+	$language = "de";
+	$queryString = NULL;
 
 	parse_str( getenv('QUERY_STRING'), $_GET);
 	if (array_key_exists( 'm', $_GET))
@@ -24,16 +25,28 @@ try
 	{
 		$restrictset = $_GET['d'];
 	}
-	if (array_key_exists( 'q', $_GET))
+	if (array_key_exists( 'l', $_GET))
 	{
-		$queryString = $_GET['q'];
+		$language = $_GET['l'];
 	}
-
-	$service_url = 'http://127.0.0.1/ellokal/query'
+	if ($mode == 2)
+	{
+		$server = 'http://127.0.0.1/ellokal/list';
+	}
+	else
+	{
+		if (array_key_exists( 'q', $_GET))
+		{
+			$queryString = $_GET['q'];
+		}
+		$server = 'http://127.0.0.1/ellokal/query';
+	}
+	$service_url = $server
 			. '?q=' . urlencode($queryString)
 			. '&i=' . urlencode($minRank)
 			. '&n=' . urlencode($nofRanks)
 			. '&m=' . urlencode($mode)
+			. '&l=' . urlencode($language)
 			. '&d=' . urlencode($restrictset);
 	$response = array(
 		"error" => "server not running"

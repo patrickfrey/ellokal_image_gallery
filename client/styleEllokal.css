@@ -54,6 +54,14 @@
 	width:      auto;
 	font-size:  20px;
 }
+#concertdate,#concerttitle,#concertdescription {
+	float:       left;
+	display:     table-column;
+	margin-left: 15px;
+	position:    relative;
+	width:       auto;
+	font-size:   18px;
+}
 #imgid {
 	font-style: bold;
 }
@@ -75,7 +83,7 @@
 	list-style: none;
 	margin-left: 10px;
 }
-#title {
+#title,#concerttitle {
 	font-style: italic;
 }
 #id,eventdate,dimension {
@@ -122,7 +130,11 @@
 	background-image: url('./concertlist-icon.png');
 	display: default;
 }
-#searchsubmit,#searchprev,#searchnext,#fullscreen,#exitfullscreen,#concertlist {
+#exitconcertlist {
+	background-image: url('./camera-icon.png');
+	display: default;
+}
+#searchsubmit,#searchprev,#searchnext,#fullscreen,#exitfullscreen,#concertlist,#exitconcertlist {
 	float: left;
 	box-sizing: border-box;
 	border: 2px solid #ccc;

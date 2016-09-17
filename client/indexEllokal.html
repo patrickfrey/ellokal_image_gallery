@@ -8,6 +8,11 @@
 	src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
 </script>
 <script type = "text/javascript" language = "javascript">
+	var g_searchmode=0;
+	var g_startindex=0;
+	var g_nofranks=4;
+	var g_query="";
+
 	function DisplayRanklist( jd, startindex, nofranks, mode) {
 		if (jd.error)
 		{
@@ -43,6 +48,17 @@
 				obj = jd.result[0];
 				ranklist = '<div id="imgprop"><div id="imgtitle">' + obj.title + '</div><div id="imgid">' + obj.filename + '</div><div id="imgdate">' + obj.eventdate + '</div><div id="imgdimension">' + obj.width + ' x ' + obj.length + "</div></div>\n" + '<div id="rank"><div id="bigimage"><img alt="Thumbnail" src="data:image/png;base64,' + obj.image + '"/></div>' + "</div>\n</div>\n";
 			}
+			else if (mode == 2)
+			{
+				var ranklist = "";
+				$.each( jd.result, function( i, obj) {
+					ranklist += '<div id="rank"><div id="concertdate">' + obj.date + '</div><div id="concerttitle">' + obj.title + '</div><div id="concertdescription">';
+					if (obj.description != null) {
+						ranklist += obj.description;
+					}
+					ranklist += "</div>\n</div>\n";
+				});
+			}
 			$('#ranklist').html( ranklist);
 			$('#ranklist').ready( function() {
 				$('#ranklist').show();
@@ -77,10 +93,10 @@
 		},
 		function(jd) {
 			DisplayRanklist( jd, startindex, nofranks, searchmode) 
-			document.getElementById("startindex").value = startindex;
-			document.getElementById("nofranks").value = nofranks;
+			g_startindex = startindex;
+			g_nofranks = nofranks;
 			document.getElementById("searchtext").value = text;
-			document.getElementById("searchmode").value = searchmode;
+			g_searchmode = searchmode;
 		})
 		.fail(function(jqXHR, status, error){
 			 alert( "Error (status " + status + "): " + error );
@@ -122,67 +138,67 @@
 	}
 	$(function() {
 		$("#searchsubmit").click(function(jd) {
-			var nof = parseInt( $('#nofranks').val());
-			var searchmode = parseInt( $('#searchmode').val());
-			var text = $('#searchtext').val();
 			$('#DidYouMeanList').hide();
-			SearchQuery( text, 0, nof, searchmode);
+			g_query = $('#searchtext').val();
+			SearchQuery( g_query, 0, g_nofranks, g_searchmode);
 		});
 		$("#searchprev").click(function(jd){
-			var nof = parseInt( $('#nofranks').val());
-			var idx = parseInt( $('#startindex').val()) - nof;
+			var idx = g_startindex - g_nofranks;
 			if (idx < 0) {
 				idx = 0;
 			}
-			var searchmode = parseInt( $('#searchmode').val());
-			var text = $('#searchtext').val();
 			$('#DidYouMeanList').hide();
-			SearchQuery( text, idx, nof, searchmode);
+			SearchQuery( $('#searchtext').val(), idx, g_nofranks, g_searchmode);
 		});
 		$("#searchnext").click(function(jd){
-			var nof = parseInt( $('#nofranks').val());
-			var idx = parseInt( $('#startindex').val()) + nof;
-			var searchmode = parseInt( $('#searchmode').val());
-			var text = $('#searchtext').val();
+			var idx = g_startindex + g_nofranks;
 			$('#DidYouMeanList').hide();
-			SearchQuery( text, idx, nof, searchmode);
+			SearchQuery( $('#searchtext').val(), idx, g_nofranks, g_searchmode);
 		});
 		$("#fullscreen").click(function(jd) {
-			var searchmode = parseInt( $('#searchmode').val());
-			var nof = parseInt( $('#nofranks').val());
-			if (searchmode == 0) {
-				searchmode = 1;
-				nof = 1;
+			if (g_searchmode == 0) {
+				g_searchmode = 1;
+				g_nofranks = 1;
 				document.getElementById('fullscreen').id = 'exitfullscreen';
 			}
 			else
 			{
-				searchmode = 0;
-				nof = 4;
+				g_searchmode = 0;
+				g_nofranks = 4;
 				document.getElementById('exitfullscreen').id = 'fullscreen';
 			}
-			document.getElementById("searchmode").value = searchmode;
-			document.getElementById("nofranks").value = nof;
-			var idx = parseInt( $('#startindex').val());
-			var text = $('#searchtext').val();
 			$('#DidYouMeanList').hide();
-			SearchQuery( text, idx, nof, searchmode);
+			g_query = $('#searchtext').val();
+			SearchQuery( g_query, g_startindex, g_nofranks, g_searchmode);
+		});
+		$("#concertlist").click(function(jd) {
+			if (g_searchmode == 0) {
+				g_searchmode = 2;
+				g_nofranks = 20;
+				document.getElementById('concertlist').id = 'exitconcertlist';
+			}
+			else
+			{
+				alert( "QUERY: " + g_query );
+				g_searchmode = 0;
+				g_nofranks = 4;
+				document.getElementById('exitconcertlist').id = 'concertlist';
+			}
+			$('#DidYouMeanList').hide();
+			SearchQuery( g_query, g_startindex, g_nofranks, g_searchmode);
 		});
 		$('#searchtext').bind('keydown', function search(event) {
 			if(event.keyCode == 13/*ENTER*/) {
-				var nof = parseInt( $('#nofranks').val());
-				var searchmode = parseInt( $('#searchmode').val());
-				var text = $('#searchtext').val();
 				$('#DidYouMeanList').hide();
-				SearchQuery( text, 0, nof, searchmode);
+				g_query = $('#searchtext').val();
+				SearchQuery( g_query, 0, g_nofranks, g_searchmode);
 			}
 		});
 		$('#DidYouMeanList').bind('keydown', function search(event) {
 			if(event.keyCode == 13/*ENTER*/) {
-				var nof = parseInt( $('#nofranks').val());
-				var searchmode = parseInt( $('#searchmode').val());
 				$('#DidYouMeanList').hide();
-				SearchQuery( $(event.target).text, 0, nof, searchmode);
+				g_query = $(event.target).text();
+				SearchQuery( g_query, 0, g_nofranks, g_searchmode);
 			}
 		});
 		$('#searchtext').bind('input', function() {
@@ -190,10 +206,9 @@
 		});
 		document.addEventListener( 'touchend', function(event) {
 			if (event.target.matches('.dymelem')) {
-				var nof = parseInt( $('#nofranks').val());
-				var searchmode = parseInt( $('#searchmode').val());
 				$('#DidYouMeanList').hide();
-				SearchQuery( $(event.target).text(), 0, nof, searchmode);
+				g_query = $(event.target).text();
+				SearchQuery( g_query, 0, g_nofranks, g_searchmode);
 			}
 			else {
 				$('#DidYouMeanList').hide();
@@ -201,10 +216,9 @@
 		});
 		document.addEventListener( 'click', function(event) {
 			if (event.target.matches('.dymelem')) {
-				var nof = parseInt( $('#nofranks').val());
-				var searchmode = parseInt( $('#searchmode').val());
 				$('#DidYouMeanList').hide();
-				SearchQuery( $(event.target).text(), 0, nof, searchmode);
+				g_query = $(event.target).text();
+				SearchQuery( g_query, 0, g_nofranks, g_searchmode);
 			}
 			else {
 				$('#DidYouMeanList').hide();
@@ -222,9 +236,6 @@
 	<input type = "button" id = "searchprev" tabindex="-1"/>
 	<input type = "button" id = "fullscreen" tabindex="0"/>
 	<input type = "button" id = "concertlist" tabindex="0"/>
-	<input type = "hidden" id = "searchmode" value="0" tabindex="-1"/>
-	<input type = "hidden" id = "startindex" value="0" tabindex="-1"/>
-	<input type = "hidden" id = "nofranks" value="4" tabindex="-1"/>
 	<div id="DidYouMean">
 		<div id="DidYouMeanList"></div>
 	</div>

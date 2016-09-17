@@ -101,6 +101,8 @@ class ConcertListHandler( tornado.web.RequestHandler ):
 application = tornado.web.Application([
      # /query in the URL triggers the handler for answering queries:
     (r"/ellokal/query", QueryHandler),
+    # /list in the URL triggers the handler for getting the concert list:
+    (r"/ellokal/list", ConcertListHandler),
     # /dym in the URL triggers the handler for getting query proposals (did you mean):
     (r"/ellokal/dym", DymHandler)
 ], cookie_secret

@@ -7,8 +7,6 @@ from passlib.apps import custom_app_context as pwd_context
 from pprint import pprint
 import inspect
 
-ConcertItem = collections.namedtuple('ConcertItem', ["id","date","title","description"])
-
 class EllokalDatabase:
     def __init__( self):
         self.conn = psycopg2.connect( host="localhost", dbname="ellokaldb", user="ellokal", password="1w5b5ufh")
@@ -74,11 +72,16 @@ class EllokalDatabase:
     @tornado.gen.coroutine
     def concertList( self, first, nof, lang):
         rt = []
-        dbquery = 'SELECT id,date,title,description_en FROM Concert WHERE id >= %u AND id < %u' % (first, first + nof)
-        yield self.cursor.execute( dbquery )
-        dbresults = self.cursor.fetchmany( nof)
+        dbquery = 'SELECT id,date,title,';
+        if (lang == 'de'):
+            dbquery += 'description_de'
+        else:
+            dbquery += 'description_en'
+        dbquery += ' FROM Concert ORDER BY id DESC'
+        self.cursor.execute( dbquery )
+        dbresults = self.cursor.fetchmany( first + nof)[ first:]
         for dbres in dbresults:
-            rt.append( ConcertItem( dbres[0], dbres[1], dbres[2], dbres[3] ))
+            rt.append({ "id":dbres[0], "date":dbres[1].strftime("%d.%m.%Y %H:%M"), "title":dbres[2], "description":dbres[3] })
         raise tornado.gen.Return( rt )
 
 
