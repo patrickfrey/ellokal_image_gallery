@@ -20,7 +20,7 @@ import ellokalStorage
 import strus
 import json
 import inspect
-import pprint
+from pprint import pprint
 
 # Storage instance
 storage = None
@@ -40,8 +40,8 @@ class QueryHandler( tornado.web.RequestHandler ):
             firstrank = int( self.get_argument( "i", 0))
             # n = nofranks:
             nofranks = int( self.get_argument( "n", 4))
-            # s = size:
-            size = int( self.get_argument( "s", 100))
+            # s = picsize:
+            picsize = int( self.get_argument( "s", 100))
             # d = document number to restrict to:
             restricts = self.get_argument( "d", "").split()
             restrictset = []
@@ -49,8 +49,11 @@ class QueryHandler( tornado.web.RequestHandler ):
                 restrictset.append( int(rs))
             # l = lang:
             lang = self.get_argument( "l", "de")
-            searchresult = storage.evaluateQuery_search( querystr, firstrank, nofranks, restrictset)
-            result = yield db.completePictures( searchresult, mode, size, lang)
+            if (len(querystr) == 0):
+                result = yield db.pictureList( firstrank, nofranks, mode, picsize, lang);
+            else:
+                searchresult = storage.evaluateQuery_search_pictures( querystr, firstrank, nofranks, restrictset)
+                result = yield db.completePictures( searchresult, mode, picsize, lang)
             response = { 'error': None,
                          'result': result
             }
@@ -89,7 +92,15 @@ class ConcertListHandler( tornado.web.RequestHandler ):
             nofranks = int( self.get_argument( "n", 4))
             # l = lang:
             lang = self.get_argument( "l", "de")
-            result = yield db.concertList( firstrank, nofranks, lang)
+            # q = query terms:
+            querystr = self.get_argument( "q", "")
+            restrictlist = None
+            if (len( querystr) != 0):
+                restrictlist = []
+                searchresult = storage.evaluateQuery_search_concerts( querystr, firstrank, nofranks)
+                for concert in searchresult:
+                    restrictlist.append( concert['id'])
+            result = yield db.concertList( firstrank, nofranks, lang, restrictlist)
             response = { 'error': None,
                          'result': result
             }

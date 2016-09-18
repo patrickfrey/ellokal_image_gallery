@@ -68,16 +68,48 @@ class EllokalDatabase:
             rt[0]['image'] = image
         raise tornado.gen.Return( rt )
 
-    # QUERY:
     @tornado.gen.coroutine
-    def concertList( self, first, nof, lang):
+    def pictureList( self, firstrank, nofranks, mode, picsize, lang):
+        rt = []
+        dbquery = 'SELECT ConcertPicture.id AS pictureId,concertId,title,focaldist,apperture,shutterspeed,insertdate,eventdate,program,resolution_X,resolution_Y,width,length,meta,fotographer,thumbnail,filename,'
+        if (lang == 'de'):
+            dbquery += 'ConcertPicture.description_de'
+        else:
+            dbquery += 'ConcertPicture.description_en'
+        dbquery += ' FROM ConcertPicture,Concert WHERE Concert.id = concertId ORDER BY eventdate DESC,pictureId DESC;';
+        self.cursor.execute( dbquery )
+        dbresults = self.cursor.fetchmany( firstrank + nofranks)
+        for dbres in dbresults[ firstrank:]:
+            rtelem = { "id":dbres[0], "concertId":dbres[1], "title":dbres[2], "focaldist":dbres[3], "apperture":dbres[4], 
+                       "shutterspeed":dbres[5], "insertdate":dbres[6].strftime("%d.%m.%Y %H:%M"),
+                       "eventdate":dbres[7], "program":dbres[8], "resolution_X":dbres[9], "resolution_Y":dbres[10],
+                       "width":dbres[11], "length":dbres[12], "meta":dbres[13], "fotographer":dbres[14],
+                       "thumbnail":dbres[15], "filename": dbres[16] }
+            rt.append( rtelem)
+        if rt and mode == 1:
+            dbquery = "SELECT image FROM ConcertPictureImg WHERE pictureId = '%s' AND size='%s'" % (rt[0]['id'], picsize)
+            self.cursor.execute( dbquery )
+            (image,) = self.cursor.fetchone()
+            rt[0]['image'] = image
+        raise tornado.gen.Return( rt )
+
+    @tornado.gen.coroutine
+    def concertList( self, first, nof, lang, restrictlist):
         rt = []
         dbquery = 'SELECT id,date,title,';
         if (lang == 'de'):
             dbquery += 'description_de'
         else:
             dbquery += 'description_en'
-        dbquery += ' FROM Concert ORDER BY id DESC'
+        restriction = ""
+        if restrictlist:
+            restriction = "WHERE ID IN (";
+            for ri,rr in enumerate(restrictlist):
+                if (ri):
+                    restriction += ',';
+                restriction += str(rr)
+            restriction += ')';
+        dbquery += ' FROM Concert %s ORDER BY id DESC' % restriction
         self.cursor.execute( dbquery )
         dbresults = self.cursor.fetchmany( first + nof)[ first:]
         for dbres in dbresults:

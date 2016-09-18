@@ -56,6 +56,7 @@ class Storage:
         })
         # Summarizers:
         rt.addSummarizer( "attribute", { "name": "title" })
+        rt.addSummarizer( "attribute", { "name": "docid" })
         return rt
 
     # Constructor. Initializes the query evaluation schemes and the query and document analyzers:
@@ -84,8 +85,8 @@ class Storage:
                     ["lc", [ "convdia", "en"]]
         )
 
-    # Query for retrieval of documents:
-    def evaluateQuery_search( self, querystr, firstrank, nofranks, restrictset):
+    # Query for retrieval of pictures:
+    def evaluateQuery_search_pictures( self, querystr, firstrank, nofranks, restrictset):
         terms = self.analyzer.analyzePhrase( "search", querystr)
         if len( terms) == 0:
             # Return empty result for empty query:
@@ -118,6 +119,38 @@ class Storage:
                     summary = sumelem.value()
             rt.append( {
                    'weight':rank.weight(), 'id':docid, 'title':title, 'summary':summary
+            })
+        return rt
+
+    # Query for retrieval of concerts:
+    def evaluateQuery_search_concerts( self, querystr, firstrank, nofranks):
+        terms = self.analyzer.analyzePhrase( "word", querystr)
+        if len( terms) == 0:
+            # Return empty result for empty query:
+            return []
+        queryeval = self.queryeval_dym
+        query = queryeval.createQuery( self.storage_dym)
+
+        selexpr = ["contains"]
+        for term in terms:
+            selexpr.append( [term.type(), term.value()] )
+            query.defineFeature( "docfeat", [term.type(), term.value()], 1.0)
+        query.defineFeature( "selfeat", selexpr, 1.0 )
+        query.setMaxNofRanks( nofranks)
+        query.setMinRank( firstrank)
+        # Evaluate the query:
+        result = query.evaluate()
+        rt = []
+        for rank in result.ranks():
+            title = ""
+            docid = None
+            for sumelem in rank.summaryElements():
+                if sumelem.name() == 'title':
+                    title = sumelem.value()
+                elif sumelem.name() == 'docid':
+                    docid = sumelem.value()
+            rt.append( {
+                   'weight':rank.weight(), 'id':docid, 'title':title
             })
         return rt
 
@@ -282,7 +315,11 @@ class Storage:
 
             # Get the results:
             rt = []
+            duplicates = {}
             for dymitem in dymitems:
-                rt.append( dymitem.phrase)
+                dupkey = dymitem.phrase.strip().lower()
+                if not duplicates.get( dupkey):
+                    rt.append( dymitem.phrase)
+                    duplicates[ dupkey] = 1
             return rt
 

@@ -30,36 +30,29 @@ try
 	{
 		$language = $_GET['l'];
 	}
+	if (array_key_exists( 'q', $_GET))
+	{
+		$queryString = $_GET['q'];
+	}
+	if (array_key_exists( 's', $_GET))
+	{
+		$size = intval( $_GET['s']);
+	}
 	if ($mode == 2)
 	{
-		$server = 'http://127.0.0.1/ellokal/list';
-		$service_url = $server
-				. '?i=' . urlencode($minRank)
-				. '&n=' . urlencode($nofRanks)
-				. '&m=' . urlencode($mode)
-				. '&l=' . urlencode($language)
-				. '&d=' . urlencode($restrictset);
+		$command = "list";
 	}
 	else
 	{
-		if (array_key_exists( 'q', $_GET))
-		{
-			$queryString = $_GET['q'];
-		}
-		if (array_key_exists( 's', $_GET))
-		{
-			$size = intval( $_GET['s']);
-		}
-		$server = 'http://127.0.0.1/ellokal/query';
-		$service_url = $server
-				. '?q=' . urlencode($queryString)
-				. '&i=' . urlencode($minRank)
-				. '&n=' . urlencode($nofRanks)
-				. '&m=' . urlencode($mode)
-				. '&l=' . urlencode($language)
-				. '&s=' . urlencode($size)
-				. '&d=' . urlencode($restrictset);
+		$command = "query";
 	}
+	$service_url = 'http://127.0.0.1/ellokal/' . $command
+			. '?q=' . urlencode($queryString)
+			. '&i=' . urlencode($minRank)
+			. '&n=' . urlencode($nofRanks)
+			. '&m=' . urlencode($mode)
+			. '&l=' . urlencode($language)
+			. '&d=' . urlencode($restrictset);
 	$response = array(
 		"error" => "server not running"
 	);
