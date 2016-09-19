@@ -94,17 +94,27 @@ class ConcertListHandler( tornado.web.RequestHandler ):
             lang = self.get_argument( "l", "de")
             # q = query terms:
             querystr = self.get_argument( "q", "")
-            restrictlist = None
             if (len( querystr) != 0):
-                restrictlist = []
                 searchresult = storage.evaluateQuery_search_concerts( querystr, firstrank, nofranks)
-                for concert in searchresult:
-                    restrictlist.append( concert['id'])
-            result = yield db.concertList( firstrank, nofranks, lang, restrictlist)
-            response = { 'error': None,
-                         'result': result
-            }
-            self.write(response)
+                if not searchresult:
+                    response = { 'error': None }
+                    self.write(response)
+                    print "NO RESULT"
+                else:
+                    restrictlist = []
+                    for concert in searchresult:
+                        restrictlist.append( concert['id'])
+                    result = yield db.concertList( firstrank, nofranks, lang, restrictlist)
+                    response = { 'error': None,
+                                 'result': result
+                    }
+                self.write(response)
+            else:
+                result = yield db.concertList( firstrank, nofranks, lang, None)
+                response = { 'error': None,
+                             'result': result
+                }
+                self.write(response)
         except Exception as e:
             response = { 'error': str(e) }
             self.write(response)

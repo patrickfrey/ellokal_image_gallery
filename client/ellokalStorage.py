@@ -87,22 +87,38 @@ class Storage:
 
     # Query for retrieval of pictures:
     def evaluateQuery_search_pictures( self, querystr, firstrank, nofranks, restrictset):
+        concertids = []
+        concertid_search = re.search('([^#]*)[#]([0-9]*)(.*)', querystr);
+        while concertid_search:
+            concertids.append( int(concertid_search.group(2)));
+            querystr = concertid_search.group(1) + concertid_search.group(3);
+            concertid_search = re.search('([^#]*)[#]([0-9]*)(.*)', querystr);
         terms = self.analyzer.analyzePhrase( "search", querystr)
-        if len( terms) == 0:
+        if not terms and not concertids:
             # Return empty result for empty query:
             return []
         queryeval = self.queryeval_search
         query = queryeval.createQuery( self.storage_search)
 
+        docexpr = ["union"]
+        if not terms:
+            for concertid in concertids:
+                query.defineFeature( "docfeat", ['concertid', str(concertid)], 1.0)
         selexpr = ["contains"]
+        if concertids:
+            for concertid in concertids:
+                docexpr.append( ['concertid', str(concertid)] )
+            selexpr.append( docexpr)
         for term in terms:
             selexpr.append( [term.type(), term.value()] )
             query.defineFeature( "docfeat", [term.type(), term.value()], 1.0)
+
         query.defineFeature( "selfeat", selexpr, 1.0 )
         query.setMaxNofRanks( nofranks)
         query.setMinRank( firstrank)
         if (len(restrictset) > 0):
             query.addDocumentEvaluationSet( restrictset )
+        print "PICTURE QUERY: %s" % query.tostring()
         # Evaluate the query:
         result = query.evaluate()
         rt = []
@@ -139,6 +155,7 @@ class Storage:
         query.setMaxNofRanks( nofranks)
         query.setMinRank( firstrank)
         # Evaluate the query:
+        print "CONCERT QUERY: %s" % query.tostring()
         result = query.evaluate()
         rt = []
         for rank in result.ranks():
@@ -149,6 +166,7 @@ class Storage:
                     title = sumelem.value()
                 elif sumelem.name() == 'docid':
                     docid = sumelem.value()
+            print( "RANK %s '%s' %f" % (docid, title, rank.weight()))
             rt.append( {
                    'weight':rank.weight(), 'id':docid, 'title':title
             })

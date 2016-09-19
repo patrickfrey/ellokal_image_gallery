@@ -9,6 +9,8 @@
 	word_de = convdia(de):stem(de):lc  word  /list/item/title();
 	word_de = convdia(de):stem(de):lc  word  /list/item/meta();
 	word_de = convdia(de):stem(de):lc  word  /list/item/description_de();
+	docid   = orig word			 /list/item/id();
+	concertid = orig word			 /list/item/concertid();
 
 [ForwardIndex]
 	orig = orig split /list/item/title();
