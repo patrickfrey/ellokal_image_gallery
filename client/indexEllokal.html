@@ -211,6 +211,7 @@
 		{
 			event.preventDefault();
 			$('#DidYouMeanList').hide();
+			$('#searchfield').hide();
 			var concertid = trg.parentNode.getAttribute("href");
 			ChangeContext( "picturelist");
 			g_query = "#" + concertid;
@@ -247,11 +248,13 @@
 		});
 		$("#searchprev").click(function(jd) {
 			$('#DidYouMeanList').hide();
+			$('#searchfield').hide();
 			SkipBackward();
 			SearchQuery( g_query);
 		});
 		$("#searchnext").click(function(jd) {
 			$('#DidYouMeanList').hide();
+			$('#searchfield').hide();
 			SkipForward();
 			SearchQuery( g_query);
 		});
@@ -261,11 +264,11 @@
 		});
 		$("#tostart").click(function(jd) {
 			$('#DidYouMeanList').hide();
+			$('#searchfield').hide();
 			SkipStart();
 			ChangeContext( "concertlist");
 			document.getElementById("searchtext").value = "";
 			g_query = ""
-			$('#searchfield').hide();
 			SearchQuery( "");
 		});
 		$("#fullscreen").click(function(jd) {
@@ -276,6 +279,7 @@
 				ChangeContext( "picturelist");
 			}
 			$('#DidYouMeanList').hide();
+			$('#searchfield').hide();
 			SearchQuery( g_query);
 		});
 		$("#concertlist").click(function(jd) {
@@ -285,6 +289,7 @@
 				ChangeContext( "concertlist");
 			}
 			$('#DidYouMeanList').hide();
+			$('#searchfield').hide();
 			SearchQuery( g_query);
 		});
 		$('#searchtext').bind('keydown', function search(event) {
