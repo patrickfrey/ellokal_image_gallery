@@ -48,7 +48,7 @@ class EllokalDatabase:
             rtelem['apperture'] = dbres[3]
             rtelem['shutterspeed'] = dbres[4]
             rtelem['insertdate'] = dbres[5].strftime("%d.%m.%Y %H:%M")
-            rtelem['eventdate'] = dbres[6]
+            rtelem['eventdate'] = dbres[6].split()[0];
             rtelem['program'] = dbres[7]
             rtelem['resolution_X'] = dbres[8]
             rtelem['resolution_Y'] = dbres[9]
@@ -82,7 +82,7 @@ class EllokalDatabase:
         for dbres in dbresults[ firstrank:]:
             rtelem = { "id":dbres[0], "concertId":dbres[1], "title":dbres[2], "focaldist":dbres[3], "apperture":dbres[4], 
                        "shutterspeed":dbres[5], "insertdate":dbres[6].strftime("%d.%m.%Y %H:%M"),
-                       "eventdate":dbres[7], "program":dbres[8], "resolution_X":dbres[9], "resolution_Y":dbres[10],
+                       "eventdate":dbres[7].split()[0], "program":dbres[8], "resolution_X":dbres[9], "resolution_Y":dbres[10],
                        "width":dbres[11], "length":dbres[12], "meta":dbres[13], "fotographer":dbres[14],
                        "thumbnail":dbres[15], "filename": dbres[16] }
             rt.append( rtelem)
@@ -113,7 +113,7 @@ class EllokalDatabase:
         self.cursor.execute( dbquery )
         dbresults = self.cursor.fetchmany( first + nof)[ first:]
         for dbres in dbresults:
-            rt.append({ "id":dbres[0], "date":dbres[1].strftime("%d.%m.%Y %H:%M"), "title":dbres[2], "description":dbres[3] })
+            rt.append({ "id":dbres[0], "date":dbres[1].strftime("%d.%m.%Y"), "title":dbres[2], "description":dbres[3] })
         raise tornado.gen.Return( rt )
 
 

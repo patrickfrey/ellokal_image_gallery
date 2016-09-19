@@ -118,7 +118,6 @@ class Storage:
         query.setMinRank( firstrank)
         if (len(restrictset) > 0):
             query.addDocumentEvaluationSet( restrictset )
-        print "PICTURE QUERY: %s" % query.tostring()
         # Evaluate the query:
         result = query.evaluate()
         rt = []
@@ -155,7 +154,6 @@ class Storage:
         query.setMaxNofRanks( nofranks)
         query.setMinRank( firstrank)
         # Evaluate the query:
-        print "CONCERT QUERY: %s" % query.tostring()
         result = query.evaluate()
         rt = []
         for rank in result.ranks():
@@ -166,7 +164,6 @@ class Storage:
                     title = sumelem.value()
                 elif sumelem.name() == 'docid':
                     docid = sumelem.value()
-            print( "RANK %s '%s' %f" % (docid, title, rank.weight()))
             rt.append( {
                    'weight':rank.weight(), 'id':docid, 'title':title
             })

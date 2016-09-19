@@ -99,7 +99,6 @@ class ConcertListHandler( tornado.web.RequestHandler ):
                 if not searchresult:
                     response = { 'error': None }
                     self.write(response)
-                    print "NO RESULT"
                 else:
                     restrictlist = []
                     for concert in searchresult:

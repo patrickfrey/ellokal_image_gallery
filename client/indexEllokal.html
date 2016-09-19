@@ -223,6 +223,7 @@
 			SkipStart();
 			g_query = trg.getAttribute("href");
 			document.getElementById("searchtext").value = g_query;
+			$('#searchfield').hide();
 			SearchQuery( g_query);
 		} else {
 			$('#DidYouMeanList').hide();
@@ -241,6 +242,7 @@
 			$('#DidYouMeanList').hide();
 			SkipStart();
 			g_query = $('#searchtext').val();
+			$('#searchfield').hide();
 			SearchQuery( g_query);
 		});
 		$("#searchprev").click(function(jd) {
@@ -248,10 +250,23 @@
 			SkipBackward();
 			SearchQuery( g_query);
 		});
-		$("#searchnext").click(function(jd){
+		$("#searchnext").click(function(jd) {
 			$('#DidYouMeanList').hide();
 			SkipForward();
 			SearchQuery( g_query);
+		});
+		$("#entersearch").click(function(jd) {
+			$('#DidYouMeanList').hide();
+			$('#searchfield').show();
+		});
+		$("#tostart").click(function(jd) {
+			$('#DidYouMeanList').hide();
+			SkipStart();
+			ChangeContext( "concertlist");
+			document.getElementById("searchtext").value = "";
+			g_query = ""
+			$('#searchfield').hide();
+			SearchQuery( "");
 		});
 		$("#fullscreen").click(function(jd) {
 			if (g_ctxname == "picturelist")
@@ -277,6 +292,7 @@
 				$('#DidYouMeanList').hide();
 				SkipStart();
 				g_query = $('#searchtext').val();
+				$('#searchfield').hide();
 				SearchQuery( g_query);
 			}
 		});
@@ -284,6 +300,7 @@
 			if(event.keyCode == 13/*ENTER*/) {
 				var trg = event.target || event.srcElement;
 				$('#DidYouMeanList').hide();
+				$('#searchtext').hide();
 				SkipStart();
 				g_query = $(trg).text();
 				SearchQuery( g_query);
@@ -301,13 +318,17 @@
 </head>
 <body>
 <div id="content">
-<div id="searchfield">
-	<input type = "text" id = "searchtext" tabindex="0"/>
-	<input type = "button" id = "searchsubmit" tabindex="-1"/>
+<div id="menu">
+	<input type = "button" id = "tostart" tabindex="0"/>
+	<input type = "button" id = "entersearch" tabindex="0"/>
 	<input type = "button" id = "searchnext" tabindex="-1"/>
 	<input type = "button" id = "searchprev" tabindex="-1"/>
 	<input type = "button" id = "fullscreen" tabindex="0"/>
 	<input type = "button" id = "concertlist" tabindex="0"/>
+	<div id="searchfield">
+		<input type = "text" id = "searchtext" tabindex="0"/>
+		<input type = "button" id = "searchsubmit" tabindex="-1"/>
+	</div>
 	<div id="DidYouMean">
 		<div id="DidYouMeanList"></div>
 	</div>
