@@ -5,7 +5,7 @@ try
 	$nofRanks = 4;
 	$minRank = 0;
 	$mode = 0;
-	$size = 100;
+	$picsize = 100;
 	$language = "de";
 	$queryString = NULL;
 
@@ -36,7 +36,7 @@ try
 	}
 	if (array_key_exists( 's', $_GET))
 	{
-		$size = intval( $_GET['s']);
+		$picsize = intval( $_GET['s']);
 	}
 	if ($mode == 2)
 	{
@@ -52,6 +52,7 @@ try
 			. '&n=' . urlencode($nofRanks)
 			. '&m=' . urlencode($mode)
 			. '&l=' . urlencode($language)
+			. '&s=' . urlencode($picsize)
 			. '&d=' . urlencode($restrictset);
 	$response = array(
 		"error" => "server not running"

@@ -30,7 +30,7 @@
 	float:      left;
 	display:    table-column;
 	position:   relative;
-	width:      98%;
+	width:      auto;
 	height:     auto;
 	max-width:  98%;
 	max-height: 90%;
@@ -185,6 +185,3 @@
 	background: #fafafa;
 	width:      348px;
 }
-
-
-
