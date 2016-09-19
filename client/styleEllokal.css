@@ -34,6 +34,7 @@
 	height:     auto;
 	max-width:  98%;
 	max-height: 90%;
+	background: black;
 	overflow:   hidden;
 }
 #imgid,#imgtitle,#imgdate,#imgdimension {
