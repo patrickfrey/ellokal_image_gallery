@@ -3,12 +3,12 @@
 Bilder Gallery Online für das El Lokal
 
 # Create tables
-psql -f scripts/createTables.sql ellokal
+psql -f scripts/dropTables.sql
+psql -f scripts/createTables.sql
 
 # Update images
-scripts/insertPictures.sh | psql ellokal
+scripts/insertZip.sh <archive file - mischa> | psql ellokal -f -
 
 # Create strus search index
-scripts/updateStrus.sh
-
+scripts/updateStrus_toimub.sh
 
