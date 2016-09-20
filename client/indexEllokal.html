@@ -285,8 +285,10 @@
 		$("#concertlist").click(function(jd) {
 			if (g_ctxname == "concertlist") {
 				ChangeContext( "picturelist");
+				$('#fullscreen').show();
 			} else {
 				ChangeContext( "concertlist");
+				$('#fullscreen').hide();
 			}
 			$('#DidYouMeanList').hide();
 			$('#searchfield').hide();

@@ -122,7 +122,7 @@
 }
 #fullscreen {
 	background-image: url('./fullscreen-icon.png');
-	display: none;
+	display: default;
 }
 #exitfullscreen {
 	background-image: url('./exit-fullscreen-icon.png');
