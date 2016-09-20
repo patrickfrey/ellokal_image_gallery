@@ -34,6 +34,7 @@
 				document.getElementById('exitconcertlist').id = 'concertlist';
 				document.getElementById('fullscreen').id = 'exitfullscreen';
 				g_ctxmap[ "fullscreen"].startindex = 0;
+				$('#fullscreen').show();
 			}
 		} else if (ctxname == "picturelist") {
 			if (g_ctxname == "fullscreen") {
@@ -43,6 +44,7 @@
 			} else if (g_ctxname == "concertlist") {
 				document.getElementById('exitconcertlist').id = 'concertlist';
 				g_ctxmap[ "picturelist"].startindex = 0;
+				$('#fullscreen').show();
 			}
 		} else if (ctxname == "concertlist") {
 			if (g_ctxname == "fullscreen") {
@@ -50,10 +52,12 @@
 				document.getElementById('concertlist').id = 'exitconcertlist';
 				g_ctxmap[ "concertlist"].startindex = 0;
 				g_query = $('#searchtext').val();
+				$('#fullscreen').hide();
 			} else if (g_ctxname == "picturelist") {
 				document.getElementById('concertlist').id = 'exitconcertlist';
 				g_ctxmap[ "concertlist"].startindex = 0;
 				g_query = $('#searchtext').val();
+				$('#fullscreen').hide();
 			} else if (g_ctxname == "concertlist") {
 			}
 		}
@@ -261,6 +265,7 @@
 		$("#entersearch").click(function(jd) {
 			$('#DidYouMeanList').hide();
 			$('#searchfield').show();
+			$('#searchtext').focus();
 		});
 		$("#tostart").click(function(jd) {
 			$('#DidYouMeanList').hide();
@@ -285,10 +290,8 @@
 		$("#concertlist").click(function(jd) {
 			if (g_ctxname == "concertlist") {
 				ChangeContext( "picturelist");
-				$('#fullscreen').show();
 			} else {
 				ChangeContext( "concertlist");
-				$('#fullscreen').hide();
 			}
 			$('#DidYouMeanList').hide();
 			$('#searchfield').hide();
@@ -307,7 +310,7 @@
 			if(event.keyCode == 13/*ENTER*/) {
 				var trg = event.target || event.srcElement;
 				$('#DidYouMeanList').hide();
-				$('#searchtext').hide();
+				$('#searchfield').hide();
 				SkipStart();
 				g_query = $(trg).text();
 				SearchQuery( g_query);
