@@ -313,6 +313,7 @@
 				$('#searchfield').hide();
 				SkipStart();
 				g_query = $(trg).text();
+				document.getElementById("searchtext").value = g_query;
 				SearchQuery( g_query);
 			}
 		});
