@@ -20,9 +20,7 @@
 	var g_query = "";
 
 	var g_screensize = 100;
-	if (screen.width < 480)		{ g_screensize = 30; }
-	else if (screen.width < 640)	{ g_screensize = 45; }
-	else if (screen.width < 1000)	{ g_screensize = 60; }
+	if (screen.width < 640)	{ g_screensize = 60; }
 
 	function ChangeContext( ctxname) {
 		if (ctxname == "fullscreen") {
