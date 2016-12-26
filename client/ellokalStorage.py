@@ -68,19 +68,19 @@ class Storage:
         self.queryeval_search = self.createQueryEval_search()         # search = document search
         self.queryeval_dym = self.createQueryEval_dym()               # dym = did you mean ... ?
         self.analyzer = self.context.createQueryAnalyzer()
-        self.analyzer.definePhraseType(
+        self.analyzer.addSearchIndexElement(
                     "search", "word_en", "word", 
                     ["lc", ["stem", "en"], ["convdia", "en"], "lc"]
         )
-        self.analyzer.definePhraseType(
+        self.analyzer.addSearchIndexElement(
                     "search", "word_de", "word", 
                     ["lc", ["stem", "de"], ["convdia", "de"], "lc"]
         )
-        self.analyzer.definePhraseType(
+        self.analyzer.addSearchIndexElement(
                     "dym", "ngram_title", "word", 
                     ["lc", [ "ngram", "WithStart", 3]]
         )
-        self.analyzer.definePhraseType(
+        self.analyzer.addSearchIndexElement(
                     "word", "word_title", "word", 
                     ["lc", [ "convdia", "en"]]
         )
@@ -93,7 +93,7 @@ class Storage:
             concertids.append( int(concertid_search.group(2)));
             querystr = concertid_search.group(1) + concertid_search.group(3);
             concertid_search = re.search('([^#]*)[#]([0-9]*)(.*)', querystr);
-        terms = self.analyzer.analyzePhrase( "search", querystr)
+        terms = self.analyzer.analyzeField( "search", querystr)
         if not terms and not concertids:
             # Return empty result for empty query:
             return []
@@ -139,7 +139,7 @@ class Storage:
 
     # Query for retrieval of concerts:
     def evaluateQuery_search_concerts( self, querystr, firstrank, nofranks):
-        terms = self.analyzer.analyzePhrase( "word", querystr)
+        terms = self.analyzer.analyzeField( "word", querystr)
         if len( terms) == 0:
             # Return empty result for empty query:
             return []
@@ -259,8 +259,8 @@ class Storage:
     # Query for retrieval of 'did you mean' proposals:
     def evaluateQuery_dym( self, querystr, nofranks):
         # Analyze query:
-        ngrams = self.analyzer.analyzePhrase( "dym", querystr)
-        words  = self.analyzer.analyzePhrase( "word", querystr)
+        ngrams = self.analyzer.analyzeField( "dym", querystr)
+        words  = self.analyzer.analyzeField( "word", querystr)
         if not words or not ngrams:
             # Return empty result for empty query:
             return []
