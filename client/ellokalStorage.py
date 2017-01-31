@@ -51,7 +51,7 @@ class Storage:
         rt.addSelectionFeature( "selfeat")
 
         # Query evaluation scheme:
-        rt.addWeightingFunction( "td", {
+        rt.addWeightingFunction( "constant", {
                 ".match": "docfeat"
         })
         # Summarizers:
